@@ -1201,43 +1201,217 @@ ul { list-style: none; }
 }
 
 /* ================================================================
-   BELIEFS / LONG-TERM VISION
+   LONG-TERM VISION — Map Section
 ================================================================ */
-.belief-list {
-  margin-bottom: 48px;
+.vision-section {
+  position: relative;
+  overflow: hidden;
 }
-.belief-item {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  padding: 22px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+.vision-bg-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 32% 55%, rgba(201,160,48,0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 78% 30%, rgba(20,34,54,0.4) 0%, transparent 60%);
+  pointer-events: none;
 }
-.belief-item:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
-.belief-arrow {
-  font-size: 18px;
-  color: var(--gold);
-  flex-shrink: 0;
-  margin-top: 2px;
+.vision-section > .container {
+  position: relative;
+  z-index: 1;
 }
-.belief-item p {
-  font-size: 17px;
-  color: rgba(255,255,255,0.72);
-  line-height: 1.58;
-}
-.vision-box {
-  background: rgba(201,160,48,0.06);
-  border: 1px solid rgba(201,160,48,0.2);
-  border-radius: var(--radius);
-  padding: 44px 40px;
+
+.vision-eyebrow,
+.vision-title {
   text-align: center;
 }
-.vision-box p {
-  font-size: 20px;
+.vision-title {
+  margin: 0 auto 64px;
+  max-width: 900px;
+}
+
+.vision-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* === MAP === */
+.vision-map-wrap {
+  position: relative;
+  width: 100%;
+}
+.vision-map-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Connection lines */
+.map-connections line {
+  stroke: rgba(201, 160, 48, 0.18);
+  stroke-width: 0.8;
+}
+
+/* City pulse rings (animated) */
+.city-pulse {
+  fill: none;
+  stroke: rgba(232, 184, 64, 0.45);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: city-pulse 3.6s ease-out infinite;
+  will-change: transform, opacity;
+}
+.city:nth-of-type(1) .city-pulse { animation-delay: 0s;   }
+.city:nth-of-type(2) .city-pulse { animation-delay: 0.45s;}
+.city:nth-of-type(3) .city-pulse { animation-delay: 0.9s; }
+.city:nth-of-type(4) .city-pulse { animation-delay: 1.35s;}
+.city:nth-of-type(5) .city-pulse { animation-delay: 1.8s; }
+.city:nth-of-type(6) .city-pulse { animation-delay: 2.25s;}
+.city:nth-of-type(7) .city-pulse { animation-delay: 2.7s; }
+
+@keyframes city-pulse {
+  0%   { transform: scale(0.6); opacity: 0.7; }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+
+/* Static rings + cores */
+.city-ring {
+  fill: none;
+  stroke: rgba(232, 184, 64, 0.55);
+  stroke-width: 1;
+}
+.city-dot {
+  fill: #e8b840;
+  filter: drop-shadow(0 0 8px rgba(232, 184, 64, 0.85));
+}
+
+/* City labels */
+.city-label {
+  fill: rgba(255, 255, 255, 0.88);
+  font-size: 13.5px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-anchor: middle;
+  letter-spacing: 0.02em;
+}
+.city-label-below {
+  dominant-baseline: hanging;
+}
+
+/* Center BTHI mark */
+.center-mark {
+  fill: #ffffff;
+  font-size: 42px;
+  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-anchor: middle;
+  filter: drop-shadow(0 0 24px rgba(232, 184, 64, 0.45));
+}
+.center-sub {
+  fill: rgba(232, 184, 64, 0.78);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+/* Activity tags floating around map */
+.map-tag {
+  position: absolute;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.24);
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
+}
+.map-tag::before {
+  content: '·';
+  margin-right: 8px;
+  color: rgba(232, 184, 64, 0.5);
+}
+
+.tag-tl { top: 2%;   left: 2%; }
+.tag-tc { top: -1%;  left: 50%; transform: translateX(-50%); }
+.tag-tr { top: 2%;   right: 2%; }
+.tag-ml { top: 50%;  left: 0;   transform: translateY(-50%); }
+.tag-mr { top: 50%;  right: 0;  transform: translateY(-50%); }
+.tag-bl { bottom: 2%;left: 2%; }
+.tag-bc { bottom: -1%; left: 50%; transform: translateX(-50%); }
+.tag-br { bottom: 2%;right: 2%; }
+
+/* === VISION TEXT BLOCK === */
+.vision-lead {
+  font-size: 22px;
   font-weight: 700;
   color: var(--white);
+  line-height: 1.42;
+  margin-bottom: 22px;
+  letter-spacing: -0.01em;
+}
+.vision-body {
+  font-size: 15.5px;
+  color: rgba(255,255,255,0.58);
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+.vision-pillars-list {
+  list-style: none;
+  margin: 0 0 32px 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+}
+.vision-pillars-list li {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  padding-left: 20px;
+  position: relative;
+  letter-spacing: 0.005em;
+}
+.vision-pillars-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: 800;
+}
+.vision-triad {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+  background: rgba(201, 160, 48, 0.06);
+  border-left: 2px solid var(--gold);
+  border-radius: 6px;
+}
+.vision-triad span {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* Closing line */
+.vision-closing {
+  text-align: center;
+  margin-top: 72px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.vision-closing p {
+  font-size: clamp(19px, 2.5vw, 26px);
+  font-weight: 600;
   font-style: italic;
-  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+  letter-spacing: 0.01em;
 }
 
 /* ================================================================
@@ -1448,6 +1622,11 @@ ul { list-style: none; }
   .ctable-layout      { grid-template-columns: 1fr; gap: 44px; }
   .founder-layout     { grid-template-columns: 200px 1fr; gap: 40px; }
   .footer-top         { grid-template-columns: 1fr; gap: 44px; }
+  .vision-layout      { grid-template-columns: 1fr; gap: 48px; }
+  .vision-title       { margin-bottom: 48px; }
+  .map-tag            { font-size: 9.5px; letter-spacing: 0.15em; }
+  .nav-links          { gap: 22px; }
+  .nav-links a        { font-size: 13px; }
 }
 
 /* ================================================================
@@ -1503,6 +1682,15 @@ ul { list-style: none; }
   .network-chain  { flex-direction: column; align-items: center; }
   .chain-arrow    { transform: rotate(90deg); }
   .chain-loop     { transform: none; font-style: italic; }
+
+  /* Vision map */
+  .vision-pillars-list  { grid-template-columns: 1fr; }
+  .city-label           { font-size: 11px; }
+  .center-mark          { font-size: 32px; }
+  .center-sub           { font-size: 9px; letter-spacing: 0.18em; }
+  .tag-ml, .tag-mr      { display: none; }
+  .map-tag              { font-size: 8.5px; }
+  .vision-lead          { font-size: 19px; }
 }
 
 /* ================================================================

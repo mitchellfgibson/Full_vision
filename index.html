@@ -29,6 +29,7 @@
         <a href="#community">Community</a>
         <a href="#roadmap">Roadmap</a>
         <a href="#founder">Founder</a>
+        <a href="#vision">Vision</a>
         <a href="#join" class="nav-cta">Join Early →</a>
       </div>
       <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
@@ -42,6 +43,7 @@
       <a href="#community">Community</a>
       <a href="#roadmap">Roadmap</a>
       <a href="#founder">Founder Story</a>
+      <a href="#vision">Vision</a>
       <a href="#join" class="nav-mobile-cta">Join The Founding Community</a>
     </div>
   </nav>
@@ -558,38 +560,143 @@
   </section>
 
   <!-- ============================================================
-       LONG-TERM VISION
+       LONG-TERM VISION (Map)
   ============================================================ -->
-  <section class="section section-dark" id="longterm">
-    <div class="container container-narrow">
-      <div class="section-eyebrow light">What We Believe</div>
-      <h2 class="section-title light">The Bet We're Making.</h2>
+  <section class="section section-navy vision-section" id="vision">
+    <div class="vision-bg-glow"></div>
+    <div class="container">
+      <div class="section-eyebrow light vision-eyebrow">Long-Term Vision</div>
+      <h2 class="section-title light vision-title">Decentralized Investor Hubs.<br>Connected By Shared Infrastructure.</h2>
 
-      <div class="belief-list reveal">
-        <div class="belief-item">
-          <span class="belief-arrow">→</span>
-          <p>Investor communities will become one of the most powerful forces in capital formation over the next decade</p>
+      <div class="vision-layout">
+        <!-- LEFT: MAP -->
+        <div class="vision-map-wrap reveal">
+          <!-- Subtle activity tags around the map -->
+          <div class="map-tag tag-tl">live events</div>
+          <div class="map-tag tag-tc">founder dinners</div>
+          <div class="map-tag tag-tr">community diligence</div>
+          <div class="map-tag tag-ml">local ambassadors</div>
+          <div class="map-tag tag-mr">investor meetups</div>
+          <div class="map-tag tag-bl">online collaboration</div>
+          <div class="map-tag tag-bc">education</div>
+          <div class="map-tag tag-br">deal sourcing</div>
+
+          <svg viewBox="0 0 1000 600" class="vision-map-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="nodeGlow">
+                <stop offset="0%" stop-color="#e8b840" stop-opacity="0.45"/>
+                <stop offset="55%" stop-color="#e8b840" stop-opacity="0.06"/>
+                <stop offset="100%" stop-color="#e8b840" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="centerGlow">
+                <stop offset="0%" stop-color="#e8b840" stop-opacity="0.55"/>
+                <stop offset="55%" stop-color="#e8b840" stop-opacity="0.10"/>
+                <stop offset="100%" stop-color="#e8b840" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Connection lines (drawn beneath nodes) -->
+            <g class="map-connections">
+              <line x1="174" y1="372" x2="252" y2="359"/>
+              <line x1="252" y1="359" x2="205" y2="317"/>
+              <line x1="174" y1="372" x2="205" y2="317"/>
+              <line x1="205" y1="317" x2="484" y2="417"/>
+              <line x1="252" y1="359" x2="484" y2="417"/>
+              <line x1="484" y1="417" x2="655" y2="317"/>
+              <line x1="655" y1="317" x2="840" y2="239"/>
+              <line x1="655" y1="317" x2="747" y2="489"/>
+              <line x1="484" y1="417" x2="747" y2="489"/>
+              <line x1="840" y1="239" x2="747" y2="489"/>
+            </g>
+
+            <!-- City nodes -->
+            <g class="city">
+              <circle cx="174" cy="372" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="174" cy="372" r="22" class="city-pulse"/>
+              <circle cx="174" cy="372" r="11" class="city-ring"/>
+              <circle cx="174" cy="372" r="5" class="city-dot"/>
+              <text x="174" y="343" class="city-label">BTHI San Diego</text>
+            </g>
+            <g class="city">
+              <circle cx="205" cy="317" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="205" cy="317" r="22" class="city-pulse"/>
+              <circle cx="205" cy="317" r="11" class="city-ring"/>
+              <circle cx="205" cy="317" r="5" class="city-dot"/>
+              <text x="205" y="288" class="city-label">BTHI Las Vegas</text>
+            </g>
+            <g class="city">
+              <circle cx="252" cy="359" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="252" cy="359" r="22" class="city-pulse"/>
+              <circle cx="252" cy="359" r="11" class="city-ring"/>
+              <circle cx="252" cy="359" r="5" class="city-dot"/>
+              <text x="252" y="392" class="city-label city-label-below">BTHI Scottsdale</text>
+            </g>
+            <g class="city">
+              <circle cx="484" cy="417" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="484" cy="417" r="22" class="city-pulse"/>
+              <circle cx="484" cy="417" r="11" class="city-ring"/>
+              <circle cx="484" cy="417" r="5" class="city-dot"/>
+              <text x="484" y="450" class="city-label city-label-below">BTHI Austin</text>
+            </g>
+            <g class="city">
+              <circle cx="655" cy="317" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="655" cy="317" r="22" class="city-pulse"/>
+              <circle cx="655" cy="317" r="11" class="city-ring"/>
+              <circle cx="655" cy="317" r="5" class="city-dot"/>
+              <text x="655" y="288" class="city-label">BTHI Nashville</text>
+            </g>
+            <g class="city">
+              <circle cx="840" cy="239" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="840" cy="239" r="22" class="city-pulse"/>
+              <circle cx="840" cy="239" r="11" class="city-ring"/>
+              <circle cx="840" cy="239" r="5" class="city-dot"/>
+              <text x="840" y="210" class="city-label">BTHI NYC</text>
+            </g>
+            <g class="city">
+              <circle cx="747" cy="489" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="747" cy="489" r="22" class="city-pulse"/>
+              <circle cx="747" cy="489" r="11" class="city-ring"/>
+              <circle cx="747" cy="489" r="5" class="city-dot"/>
+              <text x="747" y="522" class="city-label city-label-below">BTHI Miami</text>
+            </g>
+
+            <!-- Center BTHI brand mark -->
+            <g class="map-center">
+              <circle cx="500" cy="295" r="95" fill="url(#centerGlow)"/>
+              <text x="500" y="289" class="center-mark">BTHI</text>
+              <text x="500" y="318" class="center-sub">Powered by Ctable</text>
+            </g>
+          </svg>
         </div>
-        <div class="belief-item">
-          <span class="belief-arrow">→</span>
-          <p>Transparency will become a competitive advantage for companies — not just a legal checkbox</p>
-        </div>
-        <div class="belief-item">
-          <span class="belief-arrow">→</span>
-          <p>AI-assisted diligence will democratize institutional-quality research for retail investors at scale</p>
-        </div>
-        <div class="belief-item">
-          <span class="belief-arrow">→</span>
-          <p>Ecosystems built around genuine alignment — where everyone has real skin in the game — will outperform misaligned ones</p>
-        </div>
-        <div class="belief-item">
-          <span class="belief-arrow">→</span>
-          <p>Recurring investor networks, built around shared values and real data, become extremely valuable over time</p>
+
+        <!-- RIGHT: VISION TEXT -->
+        <div class="vision-text reveal">
+          <p class="vision-lead">
+            Investor communities will become one of the most powerful forces
+            in finance over the next decade.
+          </p>
+          <p class="vision-body">
+            BTHI aims to help build highly engaged local investor communities —
+            connected through shared infrastructure:
+          </p>
+          <ul class="vision-pillars-list">
+            <li>Transparency</li>
+            <li>Education</li>
+            <li>Technology</li>
+            <li>Media</li>
+            <li>Relationships</li>
+            <li>Collective intelligence</li>
+          </ul>
+          <div class="vision-triad">
+            <span>Local communities.</span>
+            <span>Shared infrastructure.</span>
+            <span>Aligned incentives.</span>
+          </div>
         </div>
       </div>
 
-      <div class="vision-box reveal">
-        <p>"We believe there is a legitimate path to building a $100M+ ecosystem if executed correctly."</p>
+      <div class="vision-closing">
+        <p>"Community-driven finance is just getting started."</p>
       </div>
     </div>
   </section>
