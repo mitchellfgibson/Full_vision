@@ -1247,9 +1247,18 @@ ul { list-style: none; }
   display: block;
 }
 
+/* US continental outline */
+.us-outline {
+  fill: rgba(255, 255, 255, 0.015);
+  stroke: rgba(201, 160, 48, 0.28);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
 /* Connection lines */
 .map-connections line {
-  stroke: rgba(201, 160, 48, 0.18);
+  stroke: rgba(201, 160, 48, 0.22);
   stroke-width: 0.8;
 }
 
@@ -1299,6 +1308,14 @@ ul { list-style: none; }
 .city-label-below {
   dominant-baseline: hanging;
 }
+.city-label-side {
+  text-anchor: start;
+  dominant-baseline: middle;
+}
+.city-label-side-left {
+  text-anchor: end;
+  dominant-baseline: middle;
+}
 
 /* Center BTHI mark */
 .center-mark {
@@ -1319,32 +1336,62 @@ ul { list-style: none; }
   text-transform: uppercase;
 }
 
-/* Activity tags floating around map */
-.map-tag {
-  position: absolute;
-  font-size: 10.5px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.24);
-  letter-spacing: 0.18em;
-  text-transform: lowercase;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: 2;
+/* Activity chips — clean row below the map */
+.vision-activities {
+  margin-top: 72px;
+  text-align: center;
 }
-.map-tag::before {
-  content: '·';
-  margin-right: 8px;
-  color: rgba(232, 184, 64, 0.5);
+.va-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+}
+.va-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+.va-chip {
+  background: rgba(201, 160, 48, 0.06);
+  border: 1px solid rgba(201, 160, 48, 0.22);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 100px;
+  letter-spacing: 0.01em;
+  transition: background var(--transition), border-color var(--transition);
+}
+.va-chip:hover {
+  background: rgba(201, 160, 48, 0.12);
+  border-color: rgba(201, 160, 48, 0.4);
 }
 
-.tag-tl { top: 2%;   left: 2%; }
-.tag-tc { top: -1%;  left: 50%; transform: translateX(-50%); }
-.tag-tr { top: 2%;   right: 2%; }
-.tag-ml { top: 50%;  left: 0;   transform: translateY(-50%); }
-.tag-mr { top: 50%;  right: 0;  transform: translateY(-50%); }
-.tag-bl { bottom: 2%;left: 2%; }
-.tag-bc { bottom: -1%; left: 50%; transform: translateX(-50%); }
-.tag-br { bottom: 2%;right: 2%; }
+/* Standalone Vision page — extra top padding to clear nav */
+.vision-standalone {
+  padding-top: calc(var(--nav-h) + 80px);
+}
+
+/* Back-to-home CTAs at bottom of vision page */
+.vision-back {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+/* Active nav link (current page) */
+.nav-current,
+.nav-mobile .nav-current {
+  color: var(--gold-bright) !important;
+}
 
 /* === VISION TEXT BLOCK === */
 .vision-lead {
