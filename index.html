@@ -30,6 +30,7 @@
         <a href="#roadmap">Roadmap</a>
         <a href="#founder">Founder</a>
         <a href="vision.html">Vision</a>
+        <button type="button" class="nav-account" data-account-open>Account</button>
         <a href="#join" class="nav-cta">Join Early →</a>
       </div>
       <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
@@ -44,9 +45,80 @@
       <a href="#roadmap">Roadmap</a>
       <a href="#founder">Founder Story</a>
       <a href="vision.html">Vision</a>
+      <button type="button" class="nav-mobile-account" data-account-open>Account</button>
       <a href="#join" class="nav-mobile-cta">Join The Founding Community</a>
     </div>
   </nav>
+
+  <!-- ============================================================
+       ACCOUNT MODAL — sign in / sign up
+  ============================================================ -->
+  <div class="account-modal" id="accountModal" aria-hidden="true" role="dialog" aria-labelledby="accountTitle">
+    <div class="account-backdrop" data-account-close></div>
+    <div class="account-card" role="document">
+      <button type="button" class="account-close" data-account-close aria-label="Close">&times;</button>
+
+      <div class="account-brand">
+        <span class="account-logo">BTHI<span class="logo-dot"></span></span>
+        <p class="account-sub">Member Access</p>
+      </div>
+
+      <div class="account-tabs" role="tablist">
+        <button type="button" class="account-tab is-active" data-account-tab="signin" role="tab" aria-selected="true">Sign In</button>
+        <button type="button" class="account-tab" data-account-tab="signup" role="tab" aria-selected="false">Sign Up</button>
+      </div>
+
+      <!-- SIGN IN -->
+      <form class="account-form is-active" id="signInForm" data-account-panel="signin" autocomplete="on" novalidate>
+        <h3 id="accountTitle" class="account-title">Welcome back.</h3>
+        <p class="account-lead">Sign in to access your member dashboard.</p>
+
+        <label class="account-field">
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="you@email.com">
+        </label>
+        <label class="account-field">
+          <span>Password</span>
+          <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••" minlength="8">
+        </label>
+
+        <button type="submit" class="account-submit">Sign In</button>
+        <p class="account-alt">
+          New to BTHI?
+          <button type="button" class="account-link" data-account-tab="signup">Create an account</button>
+        </p>
+      </form>
+
+      <!-- SIGN UP -->
+      <form class="account-form" id="signUpForm" data-account-panel="signup" autocomplete="on" novalidate>
+        <h3 class="account-title">Join BTHI.</h3>
+        <p class="account-lead">Create your member account. Free, no spam.</p>
+
+        <label class="account-field">
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="you@email.com">
+        </label>
+        <label class="account-field">
+          <span>Password</span>
+          <input type="password" name="password" required autocomplete="new-password" placeholder="At least 8 characters" minlength="8">
+        </label>
+        <label class="account-field">
+          <span>Confirm Password</span>
+          <input type="password" name="confirmPassword" required autocomplete="new-password" placeholder="Re-enter password" minlength="8">
+        </label>
+
+        <button type="submit" class="account-submit">Create Account</button>
+        <p class="account-alt">
+          Already a member?
+          <button type="button" class="account-link" data-account-tab="signin">Sign in</button>
+        </p>
+      </form>
+
+      <p class="account-legal">
+        By continuing you agree to BTHI's terms and privacy policy.
+      </p>
+    </div>
+  </div>
 
   <!-- ============================================================
        HERO

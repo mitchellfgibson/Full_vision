@@ -129,6 +129,160 @@ if (joinForm && joinCard) {
 }
 
 /* ============================================================
+   ACCOUNT MODAL — open / close, tab switch, form stubs
+   Auth backend (Supabase) hooks in inside handleSignIn / handleSignUp
+============================================================ */
+const accountModal = document.getElementById('accountModal');
+
+if (accountModal) {
+  const tabs       = accountModal.querySelectorAll('[data-account-tab]');
+  const panels     = accountModal.querySelectorAll('[data-account-panel]');
+  const signInForm = document.getElementById('signInForm');
+  const signUpForm = document.getElementById('signUpForm');
+
+  const openAccount = () => {
+    accountModal.classList.add('is-open');
+    accountModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('account-open');
+    // close mobile nav if open
+    nav.classList.remove('nav-open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    navMobile.setAttribute('aria-hidden', 'true');
+    // focus first input shortly after open
+    setTimeout(() => {
+      const active = accountModal.querySelector('.account-form.is-active input');
+      if (active) active.focus();
+    }, 80);
+  };
+
+  const closeAccount = () => {
+    accountModal.classList.remove('is-open');
+    accountModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('account-open');
+  };
+
+  const switchTab = (target) => {
+    tabs.forEach(t => {
+      const match = t.dataset.accountTab === target;
+      t.classList.toggle('is-active', match);
+      t.setAttribute('aria-selected', match);
+    });
+    panels.forEach(p => {
+      p.classList.toggle('is-active', p.dataset.accountPanel === target);
+    });
+    clearErrors();
+  };
+
+  // Triggers
+  document.querySelectorAll('[data-account-open]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); openAccount(); });
+  });
+  document.querySelectorAll('[data-account-close]').forEach(el => {
+    el.addEventListener('click', closeAccount);
+  });
+  document.querySelectorAll('[data-account-tab]').forEach(el => {
+    el.addEventListener('click', () => switchTab(el.dataset.accountTab));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && accountModal.classList.contains('is-open')) closeAccount();
+  });
+
+  // Error helpers
+  const showError = (form, message) => {
+    let err = form.querySelector('.account-error');
+    if (!err) {
+      err = document.createElement('p');
+      err.className = 'account-error';
+      form.querySelector('.account-submit').insertAdjacentElement('afterend', err);
+    }
+    err.textContent = message;
+  };
+  const clearErrors = () => {
+    accountModal.querySelectorAll('.account-error').forEach(e => e.remove());
+  };
+
+  // ── SIGN IN handler ──────────────────────────────────────────
+  // Wire Supabase here:
+  //   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  async function handleSignIn(email, password) {
+    await new Promise(r => setTimeout(r, 500)); // simulated latency
+    console.log('Sign in attempt:', { email });
+    return { ok: true };
+  }
+
+  // ── SIGN UP handler ──────────────────────────────────────────
+  // Wire Supabase here:
+  //   const { data, error } = await supabase.auth.signUp({ email, password });
+  async function handleSignUp(email, password) {
+    await new Promise(r => setTimeout(r, 500));
+    console.log('Sign up attempt:', { email });
+    return { ok: true };
+  }
+
+  // Sign In submit
+  signInForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearErrors();
+    const email    = signInForm.email.value.trim();
+    const password = signInForm.password.value;
+    const btn      = signInForm.querySelector('.account-submit');
+
+    if (!email || !password) {
+      showError(signInForm, 'Please enter your email and password.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+    const res = await handleSignIn(email, password);
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+
+    if (!res.ok) {
+      showError(signInForm, res.message || 'Invalid email or password.');
+      return;
+    }
+    btn.textContent = '✓ Signed in';
+    setTimeout(closeAccount, 700);
+  });
+
+  // Sign Up submit
+  signUpForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearErrors();
+    const email   = signUpForm.email.value.trim();
+    const pw      = signUpForm.password.value;
+    const confirm = signUpForm.confirmPassword.value;
+    const btn     = signUpForm.querySelector('.account-submit');
+
+    if (pw.length < 8) {
+      showError(signUpForm, 'Password must be at least 8 characters.');
+      return;
+    }
+    if (pw !== confirm) {
+      showError(signUpForm, 'Passwords don\'t match.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Creating account…';
+    const res = await handleSignUp(email, pw);
+    btn.disabled = false;
+    btn.textContent = 'Create Account';
+
+    if (!res.ok) {
+      showError(signUpForm, res.message || 'Something went wrong. Try again.');
+      return;
+    }
+    btn.textContent = '✓ Account created';
+    setTimeout(() => {
+      switchTab('signin');
+      btn.textContent = 'Create Account';
+    }, 900);
+  });
+}
+
+/* ============================================================
    ACTIVE NAV LINK — highlight current section
 ============================================================ */
 const sections  = document.querySelectorAll('section[id], div[id="footer"]');
