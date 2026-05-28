@@ -26,10 +26,10 @@
     <main class="invite-main">
       <div class="invite-intro">
         <span class="invite-tag">By Invitation Only</span>
-        <h1 class="invite-title">Claim Your Seat.</h1>
+        <h1 class="invite-title">Claim Your Row.</h1>
         <p class="invite-sub">
-          BTHI is being built by 1,000 founding members. Enter the 5-character
-          code from your invitation to add your name to the manifest.
+          The BTHI founding cap table is forming. Enter the 5-character code from
+          your invitation to claim your row in the ledger.
         </p>
       </div>
 
@@ -38,22 +38,23 @@
         <div class="manifest-wrap">
           <div class="manifest-head">
             <div class="manifest-head-left">
-              <span class="manifest-title">BTHI · FOUNDING MANIFEST</span>
-              <span class="manifest-sub">Seat ledger — 1,000 founding members</span>
+              <span class="manifest-title">BTHI · FOUNDING CAP TABLE</span>
+              <span class="manifest-sub">Pro-rata ownership ledger · illustrative</span>
             </div>
             <div class="manifest-counts">
-              <div><strong id="seatsClaimed">46</strong><span>claimed</span></div>
-              <div><strong id="seatsRemaining">954</strong><span>remaining</span></div>
+              <div><strong id="seatsClaimed">46</strong><span>allocated</span></div>
+              <div><strong id="seatsRemaining">954</strong><span>open</span></div>
             </div>
           </div>
 
           <div class="manifest-scroll" id="manifestScroll">
-            <table class="manifest-table" aria-label="Founding manifest">
+            <table class="manifest-table" aria-label="Founding cap table">
               <thead>
                 <tr>
-                  <th class="col-num">SEAT</th>
-                  <th class="col-name">MEMBER</th>
-                  <th class="col-role">ROLE</th>
+                  <th class="col-num">ROW</th>
+                  <th class="col-name">HOLDER</th>
+                  <th class="col-shares">SHARES</th>
+                  <th class="col-stake">STAKE</th>
                   <th class="col-status">STATUS</th>
                 </tr>
               </thead>
@@ -65,17 +66,17 @@
 
           <div class="manifest-foot">
             <span class="manifest-dot"></span>
-            Member identities sealed until founding round closes.
+            Illustrative cap table — holder identities sealed until close of round.
           </div>
         </div>
 
         <!-- RIGHT: CODE ENTRY -->
         <div class="invite-entry">
           <div class="entry-card">
-            <span class="entry-eyebrow">Your Seat</span>
+            <span class="entry-eyebrow">Your Row</span>
             <div class="entry-seat-num" id="entrySeat">#047</div>
             <p class="entry-instructions">
-              Enter the 5-character code from your invitation letter.
+              Enter the 5-character code from your invitation.
             </p>
 
             <form id="codeForm" class="code-form" autocomplete="off" novalidate>
@@ -98,7 +99,7 @@
           </div>
 
           <div class="entry-meta">
-            <span>Sealed Letter Series · 001/1000</span>
+            <span>Sealed Invitation Series</span>
           </div>
         </div>
       </div>

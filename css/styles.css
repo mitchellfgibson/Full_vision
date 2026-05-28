@@ -2068,7 +2068,8 @@ ul { list-style: none; }
   font-size: 13px;
   color: rgba(255, 255, 255, 0.5);
 }
-.account-link {
+.account-link,
+.account-link-a {
   background: none;
   border: none;
   color: var(--gold-bright, #e8b840);
@@ -2081,7 +2082,8 @@ ul { list-style: none; }
   text-underline-offset: 3px;
   text-decoration-color: rgba(232, 184, 64, 0.4);
 }
-.account-link:hover { text-decoration-color: var(--gold-bright, #e8b840); }
+.account-link:hover,
+.account-link-a:hover { text-decoration-color: var(--gold-bright, #e8b840); }
 
 .account-legal {
   margin: 22px 0 0;
@@ -2350,13 +2352,18 @@ body.account-open { overflow: hidden; }
   padding: 11px 22px;
   vertical-align: middle;
 }
-.col-num    { width: 76px;  color: rgba(255, 255, 255, 0.42); font-weight: 600; }
+.col-num    { width: 70px;  color: rgba(255, 255, 255, 0.42); font-weight: 600; }
 .col-name   { color: rgba(255, 255, 255, 0.85); }
-.col-role   { width: 130px; }
-.col-status { width: 120px; text-align: right; }
+.col-shares { width: 92px; text-align: right; color: rgba(255, 255, 255, 0.75); font-variant-numeric: tabular-nums; }
+.col-stake  { width: 78px; text-align: right; color: rgba(255, 255, 255, 0.75); font-variant-numeric: tabular-nums; }
+.col-status { width: 130px; text-align: right; }
+
+.m-shares, .m-stake { font-weight: 500; }
+.m-shares-locked, .m-stake-locked { color: rgba(255, 255, 255, 0.2); }
+.m-shares-pending, .m-stake-pending { color: var(--gold-bright, #e8b840); font-weight: 700; }
+.m-shares-self, .m-stake-self { color: #fff; font-weight: 700; }
 
 /* Filled row */
-.m-row-filled .m-name-real      { color: rgba(255, 255, 255, 0.78); font-weight: 500; }
 .m-row-filled .m-name-redacted  { color: rgba(232, 184, 64, 0.55); letter-spacing: -0.05em; }
 .m-row-filled .col-num          { color: rgba(232, 184, 64, 0.55); }
 
@@ -2484,9 +2491,10 @@ body.account-open { overflow: hidden; }
   background: linear-gradient(180deg, rgba(12, 24, 40, 0.85) 0%, rgba(7, 16, 29, 0.92) 100%);
   border: 1px solid rgba(232, 184, 64, 0.18);
   border-radius: 14px;
-  padding: 30px 28px 26px;
+  padding: 28px 22px 24px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4),
               0 0 0 1px rgba(232, 184, 64, 0.04) inset;
+  min-width: 0;
 }
 .entry-card.shake { animation: entry-shake 0.45s ease; }
 @keyframes entry-shake {
@@ -2522,13 +2530,14 @@ body.account-open { overflow: hidden; }
 
 .code-inputs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
   margin-bottom: 18px;
+  width: 100%;
 }
 .code-inputs input {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 28px;
+  font-size: clamp(20px, 5.2vw, 26px);
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
@@ -2536,10 +2545,14 @@ body.account-open { overflow: hidden; }
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(232, 184, 64, 0.25);
   border-radius: 10px;
-  padding: 14px 0;
+  padding: 12px 0;
   outline: none;
   transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
   caret-color: var(--gold-bright, #e8b840);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1.15;
 }
 .code-inputs input::placeholder { color: rgba(255, 255, 255, 0.15); }
 .code-inputs input:focus {
@@ -2626,16 +2639,27 @@ body.account-open { overflow: hidden; }
 .invite-footer-divider { margin: 0 8px; color: rgba(232, 184, 64, 0.4); }
 
 /* Responsive */
+@media (max-width: 1100px) {
+  .col-shares { display: none; }
+}
 @media (max-width: 960px) {
   .invite-grid { grid-template-columns: 1fr; gap: 24px; }
   .manifest-scroll { max-height: 380px; }
+  .col-shares { display: table-cell; }
+}
+@media (max-width: 720px) {
+  .col-shares { display: none; }
 }
 @media (max-width: 560px) {
   .invite-stage { padding: 20px 16px; }
   .invite-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .entry-card { padding: 22px 18px 20px; }
+  .entry-card { padding: 22px 16px 20px; }
   .entry-seat-num { font-size: 34px; }
-  .code-inputs input { font-size: 22px; padding: 12px 0; }
   .manifest-head { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .col-role { display: none; }
+  .col-stake { display: none; }
+  .manifest-table td, .manifest-table thead th { padding-left: 14px; padding-right: 14px; }
+}
+@media (max-width: 380px) {
+  .code-inputs { gap: 6px; }
+  .manifest-table td, .manifest-table thead th { padding-left: 10px; padding-right: 10px; font-size: 12px; }
 }

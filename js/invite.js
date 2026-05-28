@@ -21,67 +21,58 @@ const VALID_CODES = {
   'DEMO5': { seat: 47, name: 'YOU' },
 };
 
-/* === MANIFEST DATA ===========================================
-   Mostly redacted to feel exclusive. A few visible names sprinkled in
-   for warmth. Row 47 = the pending seat (the visitor's row).
+/* === CAP TABLE DATA ===========================================
+   Illustrative ledger. All holder identities redacted.
+   Each row = 1,000 shares at 0.10% (equalized founding structure).
+   Row 47 = pending row (the visitor's).
 ============================================================== */
-const ROLES = ['founder', 'angel', 'operator', 'allocator', 'member', 'advisor'];
-const SEEDED_NAMES = {
-  3:  'R. Neely',
-  7:  'M. Chen',
-  12: 'A. Rodriguez',
-  18: 'T. Williams',
-  24: 'J. Park',
-  31: 'L. Okafor',
-  38: 'D. Becker',
-  44: 'S. Kapoor',
-};
+const SHARES_PER_ROW = '1,000';
+const STAKE_PER_ROW  = '0.10%';
 
 function buildManifest() {
   const tbody = document.getElementById('manifestBody');
   const rows = [];
-  const totalRows = 70; // visible window onto the 1000
+  const totalRows = 70;
 
   for (let i = 1; i <= totalRows; i++) {
-    const seat = String(i).padStart(3, '0');
+    const num = String(i).padStart(3, '0');
     const isPending = i === 47;
     const isFilled  = i < 47;
-    const isLocked  = i > 47;
 
-    let nameCell, roleCell, statusCell, rowClass;
+    let holderCell, sharesCell, stakeCell, statusCell, rowClass;
 
     if (isPending) {
-      nameCell = `<span class="m-code-row" id="manifestCodeRow">
-                    <span class="m-cbx" data-mirror="0">_</span>
-                    <span class="m-cbx" data-mirror="1">_</span>
-                    <span class="m-cbx" data-mirror="2">_</span>
-                    <span class="m-cbx" data-mirror="3">_</span>
-                    <span class="m-cbx" data-mirror="4">_</span>
-                  </span>`;
-      roleCell = `<span class="m-role m-role-pending">your seat</span>`;
-      statusCell = `<span class="m-status m-status-pending">PENDING</span>`;
-      rowClass = 'm-row m-row-pending';
+      holderCell = `<span class="m-code-row" id="manifestCodeRow">
+                      <span class="m-cbx" data-mirror="0">_</span>
+                      <span class="m-cbx" data-mirror="1">_</span>
+                      <span class="m-cbx" data-mirror="2">_</span>
+                      <span class="m-cbx" data-mirror="3">_</span>
+                      <span class="m-cbx" data-mirror="4">_</span>
+                    </span>`;
+      sharesCell  = `<span class="m-shares m-shares-pending">${SHARES_PER_ROW}</span>`;
+      stakeCell   = `<span class="m-stake m-stake-pending">${STAKE_PER_ROW}</span>`;
+      statusCell  = `<span class="m-status m-status-pending">PENDING</span>`;
+      rowClass    = 'm-row m-row-pending';
     } else if (isFilled) {
-      const realName = SEEDED_NAMES[i];
-      nameCell = realName
-        ? `<span class="m-name m-name-real">${realName}</span>`
-        : `<span class="m-name m-name-redacted">${redactedBar()}</span>`;
-      const role = ROLES[i % ROLES.length];
-      roleCell = `<span class="m-role">${role}</span>`;
-      statusCell = `<span class="m-status m-status-claimed">✓ CLAIMED</span>`;
-      rowClass = 'm-row m-row-filled';
+      holderCell = `<span class="m-name m-name-redacted">${redactedBar()}</span>`;
+      sharesCell  = `<span class="m-shares">${SHARES_PER_ROW}</span>`;
+      stakeCell   = `<span class="m-stake">${STAKE_PER_ROW}</span>`;
+      statusCell  = `<span class="m-status m-status-claimed">✓ ALLOCATED</span>`;
+      rowClass    = 'm-row m-row-filled';
     } else {
-      nameCell = `<span class="m-name m-name-locked">${lockedBar()}</span>`;
-      roleCell = `<span class="m-role m-role-locked">—</span>`;
-      statusCell = `<span class="m-status m-status-locked">SEALED</span>`;
-      rowClass = 'm-row m-row-locked';
+      holderCell = `<span class="m-name m-name-locked">${lockedBar()}</span>`;
+      sharesCell  = `<span class="m-shares m-shares-locked">—</span>`;
+      stakeCell   = `<span class="m-stake m-stake-locked">—</span>`;
+      statusCell  = `<span class="m-status m-status-locked">SEALED</span>`;
+      rowClass    = 'm-row m-row-locked';
     }
 
     rows.push(`
       <tr class="${rowClass}" data-seat="${i}">
-        <td class="col-num">#${seat}</td>
-        <td class="col-name">${nameCell}</td>
-        <td class="col-role">${roleCell}</td>
+        <td class="col-num">#${num}</td>
+        <td class="col-name">${holderCell}</td>
+        <td class="col-shares">${sharesCell}</td>
+        <td class="col-stake">${stakeCell}</td>
         <td class="col-status">${statusCell}</td>
       </tr>
     `);
@@ -89,7 +80,6 @@ function buildManifest() {
 
   tbody.innerHTML = rows.join('');
 
-  // Center the pending row on load
   requestAnimationFrame(() => {
     const pending = tbody.querySelector('.m-row-pending');
     const scroll  = document.getElementById('manifestScroll');
@@ -221,10 +211,10 @@ form.addEventListener('submit', async e => {
   if (row) {
     row.classList.remove('m-row-pending');
     row.classList.add('m-row-claimed-now');
-    const nameCell = row.querySelector('.col-name');
-    nameCell.innerHTML = `<span class="m-name m-name-self">YOUR SEAT · ${code}</span>`;
-    row.querySelector('.col-role').innerHTML = `<span class="m-role m-role-self">founding member</span>`;
-    row.querySelector('.col-status').innerHTML = `<span class="m-status m-status-self">✓ CLAIMED</span>`;
+    row.querySelector('.col-name').innerHTML   = `<span class="m-name m-name-self">YOUR ROW · ${code}</span>`;
+    row.querySelector('.col-shares').innerHTML = `<span class="m-shares m-shares-self">${SHARES_PER_ROW}</span>`;
+    row.querySelector('.col-stake').innerHTML  = `<span class="m-stake m-stake-self">${STAKE_PER_ROW}</span>`;
+    row.querySelector('.col-status').innerHTML = `<span class="m-status m-status-self">✓ ALLOCATED</span>`;
   }
 
   // Bump seat counter
