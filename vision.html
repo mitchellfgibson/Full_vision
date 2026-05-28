@@ -95,6 +95,7 @@
         <a href="index.html#founder">Founder</a>
         <a href="vision.html" class="nav-current">Vision</a>
         <button type="button" class="nav-account" data-account-open>Account</button>
+        <a href="invite.html" class="nav-invite">Enter Code</a>
         <a href="index.html#join" class="nav-cta">Join Early →</a>
       </div>
       <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
@@ -110,6 +111,7 @@
       <a href="index.html#founder">Founder Story</a>
       <a href="vision.html" class="nav-current">Vision</a>
       <button type="button" class="nav-mobile-account" data-account-open>Account</button>
+      <a href="invite.html" class="nav-mobile-account">Enter Invitation Code</a>
       <a href="index.html#join" class="nav-mobile-cta">Join The Founding Community</a>
     </div>
   </nav>
@@ -154,7 +156,12 @@
 
       <form class="account-form" id="signUpForm" data-account-panel="signup" autocomplete="on" novalidate>
         <h3 class="account-title">Join BTHI.</h3>
-        <p class="account-lead">Create your member account. Free, no spam.</p>
+        <p class="account-lead">Account creation is by invitation. Your code unlocks your seat.</p>
+
+        <div class="account-code-badge" id="accountCodeBadge">
+          <span class="account-code-label">Invitation Code</span>
+          <span class="account-code-value" id="accountCodeValue">—</span>
+        </div>
 
         <label class="account-field">
           <span>Email</span>
@@ -173,6 +180,9 @@
         <p class="account-alt">
           Already a member?
           <button type="button" class="account-link" data-account-tab="signin">Sign in</button>
+        </p>
+        <p class="account-alt account-need-code">
+          Don't have a code? <a href="invite.html">Enter your invitation →</a>
         </p>
       </form>
 

@@ -135,10 +135,27 @@ if (joinForm && joinCard) {
 const accountModal = document.getElementById('accountModal');
 
 if (accountModal) {
-  const tabs       = accountModal.querySelectorAll('[data-account-tab]');
-  const panels     = accountModal.querySelectorAll('[data-account-panel]');
-  const signInForm = document.getElementById('signInForm');
-  const signUpForm = document.getElementById('signUpForm');
+  const tabs        = accountModal.querySelectorAll('[data-account-tab]');
+  const panels      = accountModal.querySelectorAll('[data-account-panel]');
+  const signInForm  = document.getElementById('signInForm');
+  const signUpForm  = document.getElementById('signUpForm');
+  const codeBadge   = document.getElementById('accountCodeBadge');
+  const codeValue   = document.getElementById('accountCodeValue');
+
+  // Read invite code from URL (?code=XXXXX)
+  const urlParams   = new URLSearchParams(window.location.search);
+  let inviteCode    = (urlParams.get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
+
+  function applyInviteCode() {
+    if (inviteCode && inviteCode.length === 5) {
+      if (codeValue) codeValue.textContent = inviteCode;
+      if (codeBadge) codeBadge.classList.add('is-valid');
+    } else {
+      if (codeValue) codeValue.textContent = 'NONE';
+      if (codeBadge) codeBadge.classList.remove('is-valid');
+    }
+  }
+  applyInviteCode();
 
   const openAccount = () => {
     accountModal.classList.add('is-open');
@@ -211,11 +228,18 @@ if (accountModal) {
   }
 
   // ── SIGN UP handler ──────────────────────────────────────────
-  // Wire Supabase here:
-  //   const { data, error } = await supabase.auth.signUp({ email, password });
-  async function handleSignUp(email, password) {
+  // Wire Supabase here (with invite-code lookup + mark-used):
+  //   1. Validate code:
+  //      const { data: inv } = await supabase.from('invitations')
+  //        .select('*').eq('code', code).single();
+  //      if (!inv || inv.used_at) return { ok: false, message: 'Invalid or used code' };
+  //   2. Sign up:
+  //      const { data, error } = await supabase.auth.signUp({ email, password });
+  //   3. Mark code used:
+  //      await supabase.from('invitations').update({ used_at: new Date(), user_id: data.user.id }).eq('code', code);
+  async function handleSignUp(email, password, code) {
     await new Promise(r => setTimeout(r, 500));
-    console.log('Sign up attempt:', { email });
+    console.log('Sign up attempt:', { email, code });
     return { ok: true };
   }
 
@@ -255,6 +279,10 @@ if (accountModal) {
     const confirm = signUpForm.confirmPassword.value;
     const btn     = signUpForm.querySelector('.account-submit');
 
+    if (!inviteCode || inviteCode.length !== 5) {
+      showError(signUpForm, 'A valid invitation code is required. Enter your code at /invite.');
+      return;
+    }
     if (pw.length < 8) {
       showError(signUpForm, 'Password must be at least 8 characters.');
       return;
@@ -266,7 +294,7 @@ if (accountModal) {
 
     btn.disabled = true;
     btn.textContent = 'Creating account…';
-    const res = await handleSignUp(email, pw);
+    const res = await handleSignUp(email, pw, inviteCode);
     btn.disabled = false;
     btn.textContent = 'Create Account';
 
@@ -280,6 +308,15 @@ if (accountModal) {
       btn.textContent = 'Create Account';
     }, 900);
   });
+
+  // Auto-open if URL says so (?open=signup or ?open=signin)
+  const openParam = urlParams.get('open');
+  if (openParam === 'signup' || openParam === 'signin') {
+    setTimeout(() => {
+      switchTab(openParam);
+      openAccount();
+    }, 200);
+  }
 }
 
 /* ============================================================

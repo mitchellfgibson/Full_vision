@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTHI — Founding Manifest</title>
+  <meta name="description" content="Claim your seat on the BTHI Founding Manifest. By invitation only.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-invite">
+
+  <div class="invite-stage">
+    <div class="invite-bg-grid"></div>
+    <div class="invite-bg-glow"></div>
+
+    <header class="invite-header">
+      <a href="index.html" class="invite-logo">BTHI<span class="logo-dot"></span></a>
+      <span class="invite-eyebrow">FOUNDING MANIFEST · 2026</span>
+    </header>
+
+    <main class="invite-main">
+      <div class="invite-intro">
+        <span class="invite-tag">By Invitation Only</span>
+        <h1 class="invite-title">Claim Your Seat.</h1>
+        <p class="invite-sub">
+          BTHI is being built by 1,000 founding members. Enter the 5-character
+          code from your invitation to add your name to the manifest.
+        </p>
+      </div>
+
+      <div class="invite-grid">
+        <!-- LEFT: MANIFEST -->
+        <div class="manifest-wrap">
+          <div class="manifest-head">
+            <div class="manifest-head-left">
+              <span class="manifest-title">BTHI · FOUNDING MANIFEST</span>
+              <span class="manifest-sub">Seat ledger — 1,000 founding members</span>
+            </div>
+            <div class="manifest-counts">
+              <div><strong id="seatsClaimed">46</strong><span>claimed</span></div>
+              <div><strong id="seatsRemaining">954</strong><span>remaining</span></div>
+            </div>
+          </div>
+
+          <div class="manifest-scroll" id="manifestScroll">
+            <table class="manifest-table" aria-label="Founding manifest">
+              <thead>
+                <tr>
+                  <th class="col-num">SEAT</th>
+                  <th class="col-name">MEMBER</th>
+                  <th class="col-role">ROLE</th>
+                  <th class="col-status">STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="manifestBody">
+                <!-- Rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="manifest-foot">
+            <span class="manifest-dot"></span>
+            Member identities sealed until founding round closes.
+          </div>
+        </div>
+
+        <!-- RIGHT: CODE ENTRY -->
+        <div class="invite-entry">
+          <div class="entry-card">
+            <span class="entry-eyebrow">Your Seat</span>
+            <div class="entry-seat-num" id="entrySeat">#047</div>
+            <p class="entry-instructions">
+              Enter the 5-character code from your invitation letter.
+            </p>
+
+            <form id="codeForm" class="code-form" autocomplete="off" novalidate>
+              <div class="code-inputs" id="codeInputs">
+                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="0" aria-label="Code character 1">
+                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="1" aria-label="Code character 2">
+                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="2" aria-label="Code character 3">
+                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="3" aria-label="Code character 4">
+                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="4" aria-label="Code character 5">
+              </div>
+
+              <button type="submit" class="code-submit" id="codeSubmit" disabled>Claim Seat →</button>
+
+              <div class="code-feedback" id="codeFeedback" aria-live="polite"></div>
+            </form>
+
+            <p class="entry-fineprint">
+              No code? <a href="index.html#join">Request an invitation →</a>
+            </p>
+          </div>
+
+          <div class="entry-meta">
+            <span>Sealed Letter Series · 001/1000</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="invite-footer">
+      <span>© 2026 Build Together Holdings, Inc.</span>
+      <span class="invite-footer-divider">·</span>
+      <span>The Cap Table Tells The Story.</span>
+    </footer>
+  </div>
+
+  <script src="js/invite.js"></script>
+</body>
+</html>
