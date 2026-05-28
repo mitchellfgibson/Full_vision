@@ -13,6 +13,72 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* === Animated data-flow connection lines === */
+    .map-connections path {
+      fill: none;
+      stroke: rgba(232, 184, 64, 0.45);
+      stroke-width: 1.1;
+      stroke-linecap: round;
+      stroke-dasharray: 3 9;
+      animation: data-flow 2.6s linear infinite;
+      filter: drop-shadow(0 0 4px rgba(232, 184, 64, 0.35));
+    }
+    .map-connections path:nth-child(2n)  { animation-duration: 3.2s; }
+    .map-connections path:nth-child(3n)  { animation-duration: 3.8s; }
+    .map-connections path:nth-child(4n)  { animation-direction: reverse; }
+    @keyframes data-flow {
+      from { stroke-dashoffset: 0;   }
+      to   { stroke-dashoffset: -24; }
+    }
+
+    /* Static underlay so paths still read when dashes are between gaps */
+    .map-connections .conn-base {
+      stroke: rgba(201, 160, 48, 0.10);
+      stroke-width: 0.7;
+      stroke-dasharray: none;
+      animation: none;
+      filter: none;
+    }
+
+    /* Lake Michigan inset */
+    .us-lake {
+      fill: rgba(232, 184, 64, 0.04);
+    }
+
+    /* === Vision outcomes (bullets below the triad) === */
+    .vision-outcomes {
+      list-style: none;
+      margin: 22px 0 0 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .vision-outcomes li {
+      position: relative;
+      padding: 10px 0 10px 30px;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.78);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .vision-outcomes li:last-child { border-bottom: none; }
+    .vision-outcomes li::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 18px;
+      width: 8px;
+      height: 8px;
+      border-radius: 100px;
+      background: var(--gold-bright, #e8b840);
+      box-shadow: 0 0 10px rgba(232, 184, 64, 0.65);
+    }
+    .vision-outcomes li strong {
+      color: #fff;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body class="page-vision">
 
@@ -72,79 +138,92 @@
               </radialGradient>
             </defs>
 
-            <!-- US continental outline -->
-            <path class="us-outline" d="M 88,138 L 175,108 L 280,98 L 400,92 L 510,88 L 605,85 L 680,90 L 750,100 L 815,118 L 855,150 L 870,200 L 858,242 L 818,270 L 782,310 L 758,338 L 730,378 L 708,408 L 692,440 L 685,462 L 700,478 L 710,503 L 712,528 L 702,548 L 685,548 L 668,528 L 652,498 L 632,470 L 612,458 L 595,448 L 558,442 L 510,448 L 470,458 L 445,475 L 420,495 L 390,520 L 370,510 L 360,490 L 332,468 L 295,452 L 258,442 L 220,432 L 185,420 L 158,408 L 143,388 L 130,358 L 118,328 L 108,295 L 98,258 L 88,220 L 86,180 L 88,138 Z"/>
+            <!-- US continental outline — traced from reference image -->
+            <path class="us-outline" d="M 200.4,80.0 L 356.2,112.5 L 414.4,117.7 L 482.0,119.4 L 510.3,119.4 L 512.8,114.2 L 520.5,114.2 L 524.0,122.8 L 527.4,124.5 L 542.8,125.4 L 547.9,129.6 L 556.5,129.6 L 559.1,132.2 L 560.8,129.6 L 568.5,129.6 L 581.3,133.1 L 581.3,141.6 L 569.3,149.3 L 575.3,150.2 L 576.2,154.5 L 597.6,139.1 L 605.3,139.9 L 603.6,149.3 L 611.3,155.3 L 629.3,148.5 L 637.8,148.5 L 640.4,151.9 L 648.9,150.2 L 650.7,156.2 L 658.4,158.8 L 657.5,167.3 L 652.4,168.2 L 662.6,172.5 L 663.5,190.4 L 672.9,193.0 L 674.6,201.6 L 679.8,207.5 L 679.8,217.8 L 671.2,228.1 L 675.5,233.2 L 684.9,230.7 L 713.2,206.7 L 710.6,203.3 L 710.6,195.6 L 720.9,191.3 L 738.0,189.6 L 743.1,184.4 L 739.7,181.0 L 740.5,173.3 L 756.0,156.2 L 792.8,147.6 L 801.3,136.5 L 804.7,108.2 L 809.0,99.7 L 831.3,98.0 L 836.4,105.7 L 841.6,122.8 L 854.4,133.9 L 854.4,140.8 L 844.1,151.9 L 834.7,156.2 L 833.9,162.2 L 822.7,169.0 L 819.3,179.3 L 820.2,186.1 L 828.7,197.3 L 828.7,205.0 L 812.5,216.1 L 810.7,224.7 L 792.8,234.1 L 792.8,246.9 L 785.1,263.2 L 785.9,271.8 L 779.1,293.2 L 782.5,294.9 L 783.3,301.7 L 787.6,307.7 L 787.6,318.8 L 782.5,328.2 L 783.3,336.8 L 779.1,340.2 L 771.4,340.2 L 764.5,348.8 L 764.5,354.8 L 754.2,359.1 L 749.1,366.8 L 749.1,371.9 L 730.3,389.9 L 723.4,408.7 L 728.6,426.7 L 744.0,445.5 L 744.0,454.1 L 756.8,472.1 L 756.0,499.5 L 752.5,506.3 L 748.2,508.9 L 738.8,508.9 L 733.7,501.2 L 723.4,493.5 L 712.3,481.5 L 708.0,471.2 L 703.7,468.6 L 703.7,450.7 L 684.9,434.4 L 674.6,443.0 L 665.2,443.8 L 658.4,436.1 L 649.8,433.5 L 634.4,438.7 L 614.7,437.8 L 612.1,447.2 L 618.1,452.4 L 616.4,459.2 L 583.9,460.9 L 571.9,452.4 L 550.5,452.4 L 533.4,456.7 L 517.1,470.4 L 510.3,472.1 L 494.9,488.3 L 493.2,502.0 L 496.6,515.7 L 494.0,520.0 L 487.2,520.0 L 471.8,515.7 L 460.6,508.0 L 452.1,488.3 L 427.2,451.5 L 415.3,451.5 L 405.0,463.5 L 395.6,461.8 L 383.6,452.4 L 376.7,436.1 L 354.5,411.3 L 339.1,411.3 L 335.6,418.1 L 291.1,413.0 L 253.5,392.5 L 238.1,380.5 L 208.9,377.0 L 205.5,362.5 L 195.3,353.1 L 194.4,348.8 L 185.8,345.4 L 181.6,339.4 L 172.1,336.0 L 168.7,331.7 L 169.6,320.5 L 157.6,299.1 L 159.3,288.0 L 155.9,285.4 L 155.9,270.9 L 146.5,250.4 L 148.2,230.7 L 145.6,226.4 L 145.6,217.8 L 154.2,201.6 L 152.5,186.1 L 155.0,175.9 L 164.4,163.9 L 175.6,135.6 L 179.8,109.1 L 177.3,100.5 L 179.0,87.7 L 187.5,86.0 L 195.3,92.8 L 200.4,80.0 Z"/>
 
             <!-- Connection lines (drawn beneath nodes) -->
             <g class="map-connections">
-              <line x1="190" y1="400" x2="259" y2="385"/>
-              <line x1="259" y1="385" x2="218" y2="337"/>
-              <line x1="190" y1="400" x2="218" y2="337"/>
-              <line x1="218" y1="337" x2="456" y2="446"/>
-              <line x1="259" y1="385" x2="456" y2="446"/>
-              <line x1="456" y1="446" x2="607" y2="333"/>
-              <line x1="607" y1="333" x2="783" y2="247"/>
-              <line x1="607" y1="333" x2="698" y2="528"/>
-              <line x1="456" y1="446" x2="698" y2="528"/>
-              <line x1="783" y1="247" x2="698" y2="528"/>
+              <!-- Static underlay -->
+              <path class="conn-base" d="M 222,376 L 304,374"/>
+              <path class="conn-base" d="M 304,374 L 265,322"/>
+              <path class="conn-base" d="M 222,376 L 265,322"/>
+              <path class="conn-base" d="M 304,374 L 486,445"/>
+              <path class="conn-base" d="M 265,322 L 486,445"/>
+              <path class="conn-base" d="M 486,445 L 610,324"/>
+              <path class="conn-base" d="M 610,324 L 791,253"/>
+              <path class="conn-base" d="M 610,324 L 743,508"/>
+              <path class="conn-base" d="M 486,445 L 743,508"/>
+              <path class="conn-base" d="M 791,253 L 743,508"/>
+
+              <!-- Animated data flow on top -->
+              <path d="M 222,376 L 304,374"/>
+              <path d="M 304,374 L 265,322"/>
+              <path d="M 222,376 L 265,322"/>
+              <path d="M 304,374 L 486,445"/>
+              <path d="M 265,322 L 486,445"/>
+              <path d="M 486,445 L 610,324"/>
+              <path d="M 610,324 L 791,253"/>
+              <path d="M 610,324 L 743,508"/>
+              <path d="M 486,445 L 743,508"/>
+              <path d="M 791,253 L 743,508"/>
             </g>
 
             <!-- City nodes -->
             <g class="city">
-              <circle cx="190" cy="400" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="190" cy="400" r="22" class="city-pulse"/>
-              <circle cx="190" cy="400" r="11" class="city-ring"/>
-              <circle cx="190" cy="400" r="5" class="city-dot"/>
-              <text x="190" y="371" class="city-label">BTHI San Diego</text>
+              <circle cx="222" cy="376" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="222" cy="376" r="22" class="city-pulse"/>
+              <circle cx="222" cy="376" r="11" class="city-ring"/>
+              <circle cx="222" cy="376" r="5" class="city-dot"/>
+              <text x="222" y="404" class="city-label city-label-below">BTHI San Diego</text>
             </g>
             <g class="city">
-              <circle cx="218" cy="337" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="218" cy="337" r="22" class="city-pulse"/>
-              <circle cx="218" cy="337" r="11" class="city-ring"/>
-              <circle cx="218" cy="337" r="5" class="city-dot"/>
-              <text x="218" y="308" class="city-label">BTHI Las Vegas</text>
+              <circle cx="265" cy="322" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="265" cy="322" r="22" class="city-pulse"/>
+              <circle cx="265" cy="322" r="11" class="city-ring"/>
+              <circle cx="265" cy="322" r="5" class="city-dot"/>
+              <text x="265" y="294" class="city-label">BTHI Las Vegas</text>
             </g>
             <g class="city">
-              <circle cx="259" cy="385" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="259" cy="385" r="22" class="city-pulse"/>
-              <circle cx="259" cy="385" r="11" class="city-ring"/>
-              <circle cx="259" cy="385" r="5" class="city-dot"/>
-              <text x="289" y="385" class="city-label city-label-side">BTHI Scottsdale</text>
+              <circle cx="304" cy="374" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="304" cy="374" r="22" class="city-pulse"/>
+              <circle cx="304" cy="374" r="11" class="city-ring"/>
+              <circle cx="304" cy="374" r="5" class="city-dot"/>
+              <text x="334" y="374" class="city-label city-label-side">BTHI Scottsdale</text>
             </g>
             <g class="city">
-              <circle cx="456" cy="446" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="456" cy="446" r="22" class="city-pulse"/>
-              <circle cx="456" cy="446" r="11" class="city-ring"/>
-              <circle cx="456" cy="446" r="5" class="city-dot"/>
-              <text x="456" y="479" class="city-label city-label-below">BTHI Austin</text>
+              <circle cx="486" cy="445" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="486" cy="445" r="22" class="city-pulse"/>
+              <circle cx="486" cy="445" r="11" class="city-ring"/>
+              <circle cx="486" cy="445" r="5" class="city-dot"/>
+              <text x="486" y="417" class="city-label">BTHI Austin</text>
             </g>
             <g class="city">
-              <circle cx="607" cy="333" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="607" cy="333" r="22" class="city-pulse"/>
-              <circle cx="607" cy="333" r="11" class="city-ring"/>
-              <circle cx="607" cy="333" r="5" class="city-dot"/>
-              <text x="607" y="304" class="city-label">BTHI Nashville</text>
+              <circle cx="610" cy="324" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="610" cy="324" r="22" class="city-pulse"/>
+              <circle cx="610" cy="324" r="11" class="city-ring"/>
+              <circle cx="610" cy="324" r="5" class="city-dot"/>
+              <text x="610" y="296" class="city-label">BTHI Nashville</text>
             </g>
             <g class="city">
-              <circle cx="783" cy="247" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="783" cy="247" r="22" class="city-pulse"/>
-              <circle cx="783" cy="247" r="11" class="city-ring"/>
-              <circle cx="783" cy="247" r="5" class="city-dot"/>
-              <text x="783" y="218" class="city-label">BTHI NYC</text>
+              <circle cx="791" cy="253" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="791" cy="253" r="22" class="city-pulse"/>
+              <circle cx="791" cy="253" r="11" class="city-ring"/>
+              <circle cx="791" cy="253" r="5" class="city-dot"/>
+              <text x="761" y="253" class="city-label city-label-side-left">BTHI NYC</text>
             </g>
             <g class="city">
-              <circle cx="698" cy="528" r="62" fill="url(#nodeGlow)"/>
-              <circle cx="698" cy="528" r="22" class="city-pulse"/>
-              <circle cx="698" cy="528" r="11" class="city-ring"/>
-              <circle cx="698" cy="528" r="5" class="city-dot"/>
-              <text x="668" y="528" class="city-label city-label-side-left">BTHI Miami</text>
+              <circle cx="743" cy="508" r="62" fill="url(#nodeGlow)"/>
+              <circle cx="743" cy="508" r="22" class="city-pulse"/>
+              <circle cx="743" cy="508" r="11" class="city-ring"/>
+              <circle cx="743" cy="508" r="5" class="city-dot"/>
+              <text x="713" y="508" class="city-label city-label-side-left">BTHI Miami</text>
             </g>
 
             <!-- Center BTHI brand mark -->
             <g class="map-center">
-              <circle cx="470" cy="270" r="95" fill="url(#centerGlow)"/>
-              <text x="470" y="264" class="center-mark">BTHI</text>
-              <text x="470" y="293" class="center-sub">Powered by Ctable</text>
+              <circle cx="470" cy="275" r="95" fill="url(#centerGlow)"/>
+              <text x="470" y="269" class="center-mark">BTHI</text>
+              <text x="470" y="298" class="center-sub">Powered by Ctable</text>
             </g>
           </svg>
         </div>
@@ -172,6 +251,12 @@
             <span>Shared infrastructure.</span>
             <span>Aligned incentives.</span>
           </div>
+          <ul class="vision-outcomes">
+            <li><strong>Every hub runs independently</strong> — local leadership, local deal flow, local relationships.</li>
+            <li><strong>One shared playbook</strong> — Ctable, education, and tooling power every community underneath.</li>
+            <li><strong>Capital and intelligence flow freely</strong> between hubs, compounding with every new city.</li>
+            <li><strong>Investors win when companies win</strong> — incentives aligned by design, not by hope.</li>
+          </ul>
         </div>
       </div>
 
