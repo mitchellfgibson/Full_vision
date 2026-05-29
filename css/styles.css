@@ -2341,18 +2341,22 @@ body.account-open { overflow: hidden; }
   letter-spacing: 0.18em;
   color: rgba(255, 255, 255, 0.35);
   text-align: left;
-  padding: 12px 22px;
+  padding: 12px 14px;
   border-bottom: 1px solid rgba(232, 184, 64, 0.10);
   z-index: 3;
 }
+.manifest-table thead th.col-num    { padding-left: 22px; }
+.manifest-table thead th.col-status { padding-right: 22px; }
 .manifest-table tbody tr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   transition: background 0.18s ease;
 }
 .manifest-table td {
-  padding: 18px 22px;
+  padding: 16px 14px;
   vertical-align: middle;
 }
+.manifest-table td.col-num { padding-left: 22px; }
+.manifest-table td.col-status { padding-right: 22px; }
 .col-num    { width: 70px;  color: rgba(255, 255, 255, 0.42); font-weight: 600; }
 .col-name   { color: rgba(255, 255, 255, 0.85); }
 .col-shares { width: 92px; text-align: right; color: rgba(255, 255, 255, 0.75); font-variant-numeric: tabular-nums; }
@@ -2493,21 +2497,21 @@ body.account-open { overflow: hidden; }
 /* Row-inline code inputs (live INSIDE the pending row's holder cell) */
 .row-code-inputs {
   display: inline-flex;
-  gap: 6px;
+  gap: 5px;
   align-items: center;
 }
 .row-code-inputs input {
-  width: 48px;
-  height: 58px;
+  width: 36px;
+  height: 48px;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
   color: var(--gold-bright, #e8b840);
   background: rgba(232, 184, 64, 0.1);
   border: 1.5px solid rgba(232, 184, 64, 0.5);
-  border-radius: 8px;
+  border-radius: 7px;
   padding: 0;
   outline: none;
   caret-color: var(--gold-bright, #e8b840);
