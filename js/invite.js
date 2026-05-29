@@ -145,7 +145,7 @@ form.addEventListener('submit', async e => {
     feedback.textContent = result.message || 'That code isn\'t recognized.';
     feedback.className = 'code-feedback is-error';
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Claim Row →';
+    submitBtn.textContent = 'Join →';
     const panel = document.querySelector('.invite-panel');
     if (panel) {
       panel.classList.add('shake');
