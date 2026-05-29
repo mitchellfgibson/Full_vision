@@ -22,26 +22,25 @@ const VALID_CODES = {
 };
 
 /* === CAP TABLE DATA ===========================================
-   Illustrative ledger. All holder identities redacted.
-   Each row = 1,000 shares at 0.10% (equalized founding structure).
-   Row 47 = pending row (the visitor's).
+   A fun, illustrative 5-row cap table. Row 4 = pending (yours).
 ============================================================== */
-const SHARES_PER_ROW = '1,000';
-const STAKE_PER_ROW  = '0.10%';
+const CAP_TABLE = [
+  { num: 1, holder: 'THE FOUNDER',       shares: '4,000', stake: '40.0%', status: 'allocated' },
+  { num: 2, holder: 'THE OPTIMIST',      shares: '2,000', stake: '20.0%', status: 'allocated' },
+  { num: 3, holder: 'THE OPERATOR',      shares: '1,500', stake: '15.0%', status: 'allocated' },
+  { num: 4, holder: null /* you */,      shares: '1,500', stake: '15.0%', status: 'pending'   },
+  { num: 5, holder: 'THE NEXT BELIEVER', shares: '1,000', stake: '10.0%', status: 'sealed'    },
+];
 
 function buildManifest() {
   const tbody = document.getElementById('manifestBody');
-  const rows = [];
-  const totalRows = 70;
+  const rows  = [];
 
-  for (let i = 1; i <= totalRows; i++) {
-    const num = String(i).padStart(3, '0');
-    const isPending = i === 47;
-    const isFilled  = i < 47;
-
+  CAP_TABLE.forEach(row => {
+    const num = String(row.num).padStart(3, '0');
     let holderCell, sharesCell, stakeCell, statusCell, rowClass;
 
-    if (isPending) {
+    if (row.status === 'pending') {
       holderCell = `<span class="m-code-row" id="manifestCodeRow">
                       <span class="m-cbx" data-mirror="0">_</span>
                       <span class="m-cbx" data-mirror="1">_</span>
@@ -49,26 +48,26 @@ function buildManifest() {
                       <span class="m-cbx" data-mirror="3">_</span>
                       <span class="m-cbx" data-mirror="4">_</span>
                     </span>`;
-      sharesCell  = `<span class="m-shares m-shares-pending">${SHARES_PER_ROW}</span>`;
-      stakeCell   = `<span class="m-stake m-stake-pending">${STAKE_PER_ROW}</span>`;
-      statusCell  = `<span class="m-status m-status-pending">PENDING</span>`;
-      rowClass    = 'm-row m-row-pending';
-    } else if (isFilled) {
-      holderCell = `<span class="m-name m-name-redacted">${redactedBar()}</span>`;
-      sharesCell  = `<span class="m-shares">${SHARES_PER_ROW}</span>`;
-      stakeCell   = `<span class="m-stake">${STAKE_PER_ROW}</span>`;
-      statusCell  = `<span class="m-status m-status-claimed">✓ ALLOCATED</span>`;
-      rowClass    = 'm-row m-row-filled';
-    } else {
-      holderCell = `<span class="m-name m-name-locked">${lockedBar()}</span>`;
-      sharesCell  = `<span class="m-shares m-shares-locked">—</span>`;
-      stakeCell   = `<span class="m-stake m-stake-locked">—</span>`;
-      statusCell  = `<span class="m-status m-status-locked">SEALED</span>`;
-      rowClass    = 'm-row m-row-locked';
+      sharesCell = `<span class="m-shares m-shares-pending">${row.shares}</span>`;
+      stakeCell  = `<span class="m-stake m-stake-pending">${row.stake}</span>`;
+      statusCell = `<span class="m-status m-status-pending">PENDING</span>`;
+      rowClass   = 'm-row m-row-pending';
+    } else if (row.status === 'allocated') {
+      holderCell = `<span class="m-name m-name-holder">${row.holder}</span>`;
+      sharesCell = `<span class="m-shares">${row.shares}</span>`;
+      stakeCell  = `<span class="m-stake">${row.stake}</span>`;
+      statusCell = `<span class="m-status m-status-claimed">✓ ALLOCATED</span>`;
+      rowClass   = 'm-row m-row-filled';
+    } else { // sealed
+      holderCell = `<span class="m-name m-name-sealed">${row.holder}</span>`;
+      sharesCell = `<span class="m-shares m-shares-locked">${row.shares}</span>`;
+      stakeCell  = `<span class="m-stake m-stake-locked">${row.stake}</span>`;
+      statusCell = `<span class="m-status m-status-locked">SEALED</span>`;
+      rowClass   = 'm-row m-row-locked';
     }
 
     rows.push(`
-      <tr class="${rowClass}" data-seat="${i}">
+      <tr class="${rowClass}" data-seat="${row.num}">
         <td class="col-num">#${num}</td>
         <td class="col-name">${holderCell}</td>
         <td class="col-shares">${sharesCell}</td>
@@ -76,27 +75,9 @@ function buildManifest() {
         <td class="col-status">${statusCell}</td>
       </tr>
     `);
-  }
+  });
 
   tbody.innerHTML = rows.join('');
-
-  requestAnimationFrame(() => {
-    const pending = tbody.querySelector('.m-row-pending');
-    const scroll  = document.getElementById('manifestScroll');
-    if (pending && scroll) {
-      const offset = pending.offsetTop - (scroll.clientHeight / 2) + (pending.clientHeight / 2);
-      scroll.scrollTo({ top: offset, behavior: 'auto' });
-    }
-  });
-}
-
-function redactedBar() {
-  const widths = [10, 11, 12, 13, 9, 14];
-  const w = widths[Math.floor(Math.random() * widths.length)];
-  return '█'.repeat(w);
-}
-function lockedBar() {
-  return '░'.repeat(11);
 }
 
 /* ============================================================
@@ -207,21 +188,22 @@ form.addEventListener('submit', async e => {
   submitBtn.textContent = '✓ Seat Claimed';
   submitBtn.classList.add('is-success');
 
-  const row = document.querySelector('.m-row-pending');
-  if (row) {
+  const youRow = CAP_TABLE.find(r => r.status === 'pending');
+  const row    = document.querySelector('.m-row-pending');
+  if (row && youRow) {
     row.classList.remove('m-row-pending');
     row.classList.add('m-row-claimed-now');
-    row.querySelector('.col-name').innerHTML   = `<span class="m-name m-name-self">YOUR ROW · ${code}</span>`;
-    row.querySelector('.col-shares').innerHTML = `<span class="m-shares m-shares-self">${SHARES_PER_ROW}</span>`;
-    row.querySelector('.col-stake').innerHTML  = `<span class="m-stake m-stake-self">${STAKE_PER_ROW}</span>`;
+    row.querySelector('.col-name').innerHTML   = `<span class="m-name m-name-self">YOU · ${code}</span>`;
+    row.querySelector('.col-shares').innerHTML = `<span class="m-shares m-shares-self">${youRow.shares}</span>`;
+    row.querySelector('.col-stake').innerHTML  = `<span class="m-stake m-stake-self">${youRow.stake}</span>`;
     row.querySelector('.col-status').innerHTML = `<span class="m-status m-status-self">✓ ALLOCATED</span>`;
   }
 
-  // Bump seat counter
-  const claimedEl   = document.getElementById('seatsClaimed');
-  const remainingEl = document.getElementById('seatsRemaining');
-  if (claimedEl)   claimedEl.textContent = '47';
-  if (remainingEl) remainingEl.textContent = '953';
+  // Bump cap-table counter
+  const claimedEl = document.getElementById('seatsClaimed');
+  const openEl    = document.getElementById('seatsRemaining');
+  if (claimedEl) claimedEl.textContent = '4';
+  if (openEl)    openEl.textContent    = '1';
 
   // Brief celebration, then route into account creation
   setTimeout(() => {

@@ -2293,36 +2293,7 @@ body.account-open { overflow: hidden; }
 }
 
 .manifest-scroll {
-  max-height: 520px;
-  overflow-y: auto;
   position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(232, 184, 64, 0.25) transparent;
-}
-.manifest-scroll::-webkit-scrollbar { width: 6px; }
-.manifest-scroll::-webkit-scrollbar-thumb {
-  background: rgba(232, 184, 64, 0.20);
-  border-radius: 4px;
-}
-.manifest-scroll::-webkit-scrollbar-track { background: transparent; }
-.manifest-scroll::before,
-.manifest-scroll::after {
-  content: '';
-  position: sticky;
-  display: block;
-  height: 24px;
-  z-index: 2;
-  pointer-events: none;
-}
-.manifest-scroll::before {
-  top: 0;
-  background: linear-gradient(180deg, rgba(7, 16, 29, 0.95), transparent);
-  margin-bottom: -24px;
-}
-.manifest-scroll::after {
-  bottom: 0;
-  background: linear-gradient(0deg, rgba(7, 16, 29, 0.95), transparent);
-  margin-top: -24px;
 }
 
 .manifest-table {
@@ -2349,7 +2320,7 @@ body.account-open { overflow: hidden; }
   transition: background 0.18s ease;
 }
 .manifest-table td {
-  padding: 11px 22px;
+  padding: 18px 22px;
   vertical-align: middle;
 }
 .col-num    { width: 70px;  color: rgba(255, 255, 255, 0.42); font-weight: 600; }
@@ -2364,13 +2335,24 @@ body.account-open { overflow: hidden; }
 .m-shares-self, .m-stake-self { color: #fff; font-weight: 700; }
 
 /* Filled row */
-.m-row-filled .m-name-redacted  { color: rgba(232, 184, 64, 0.55); letter-spacing: -0.05em; }
+.m-row-filled .m-name-holder    {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
 .m-row-filled .col-num          { color: rgba(232, 184, 64, 0.55); }
 
-/* Locked row */
-.m-row-locked                   { opacity: 0.5; }
-.m-row-locked .m-name-locked    { color: rgba(255, 255, 255, 0.18); letter-spacing: -0.05em; }
-.m-row-locked .col-num          { color: rgba(255, 255, 255, 0.25); }
+/* Locked / sealed row (last placeholder) */
+.m-row-locked                   { opacity: 0.55; }
+.m-row-locked .m-name-sealed    {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-style: italic;
+  font-size: 13px;
+}
+.m-row-locked .col-num          { color: rgba(255, 255, 255, 0.3); }
 
 /* Pending row — the user's seat */
 .m-row-pending {
@@ -2530,14 +2512,15 @@ body.account-open { overflow: hidden; }
 
 .code-inputs {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
-  margin-bottom: 18px;
+  margin: 0 auto 18px;
+  max-width: 300px;
   width: 100%;
 }
 .code-inputs input {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: clamp(20px, 5.2vw, 26px);
+  font-size: 22px;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
@@ -2545,14 +2528,14 @@ body.account-open { overflow: hidden; }
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(232, 184, 64, 0.25);
   border-radius: 10px;
-  padding: 12px 0;
+  height: 54px;
+  padding: 0;
   outline: none;
   transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
   caret-color: var(--gold-bright, #e8b840);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  aspect-ratio: 1 / 1.15;
 }
 .code-inputs input::placeholder { color: rgba(255, 255, 255, 0.15); }
 .code-inputs input:focus {
