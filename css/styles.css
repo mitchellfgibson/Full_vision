@@ -563,6 +563,7 @@ ul { list-style: none; }
   margin-bottom: 52px;
 }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
 
 /* Problem cards */
 .problem-card {
@@ -834,7 +835,8 @@ ul { list-style: none; }
   gap: 14px;
   align-items: flex-start;
 }
-.pf-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.pf-icon { flex-shrink: 0; margin-top: 1px; color: var(--gold); }
+.pf-icon svg { width: 22px; height: 22px; display: block; }
 .pf-text strong {
   display: block;
   font-size: 14px;
@@ -977,7 +979,8 @@ ul { list-style: none; }
   border-color: rgba(201,160,48,0.2);
   transform: translateY(-2px);
 }
-.comm-icon { font-size: 26px; margin-bottom: 14px; }
+.comm-icon { margin-bottom: 16px; color: var(--gold); }
+.comm-icon svg { width: 28px; height: 28px; display: block; }
 .community-card h3 {
   font-size: 16px;
   font-weight: 700;
@@ -1699,6 +1702,7 @@ ul { list-style: none; }
 
   /* Cards */
   .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
 
   /* Questions */
   .questions-grid { grid-template-columns: 1fr; }
