@@ -446,6 +446,72 @@ if (accountModal) {
       openAccount();
     }, 200);
   }
+
+  /* ============================================================
+     WELCOME POPUP — fires after returning from email confirmation
+  ============================================================ */
+  const welcomeModal = document.getElementById('welcomeModal');
+
+  function showWelcome(user) {
+    if (!welcomeModal) return;
+    const sub = document.getElementById('welcomeSub');
+    const fn  = user && user.user_metadata ? (user.user_metadata.first_name || '').trim() : '';
+    if (sub) {
+      sub.textContent = fn
+        ? `Welcome, ${fn}. Your row on the founding cap table is locked in — you're officially part of the community.`
+        : `Your row on the founding cap table is locked in. You're officially part of the community.`;
+    }
+    welcomeModal.classList.add('is-open');
+    welcomeModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('account-open');
+  }
+
+  function closeWelcome() {
+    if (!welcomeModal) return;
+    welcomeModal.classList.remove('is-open');
+    welcomeModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('account-open');
+    if (window.location.hash || /[?&]type=/.test(window.location.search)) {
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+
+  if (welcomeModal) {
+    welcomeModal.querySelectorAll('[data-welcome-close]').forEach(el => {
+      el.addEventListener('click', closeWelcome);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && welcomeModal.classList.contains('is-open')) closeWelcome();
+    });
+
+    const hashStr = window.location.hash || '';
+    const qsStr   = window.location.search || '';
+    const isPostConfirm = /[?#&]type=(signup|recovery|magiclink|invite)/.test(hashStr + qsStr);
+
+    if (isPostConfirm) {
+      setTimeout(async () => {
+        const sb = window.bthiSupabase;
+        let user = null;
+        if (sb) {
+          const { data } = await sb.auth.getUser();
+          user = data ? data.user : null;
+        }
+        applySessionUI(user);
+        showWelcome(user);
+      }, 400);
+    }
+
+    if (window.bthiSupabase) {
+      window.bthiSupabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session && session.user) {
+          applySessionUI(session.user);
+        }
+        if (event === 'SIGNED_OUT') {
+          applySessionUI(null);
+        }
+      });
+    }
+  }
 }
 
 /* ============================================================

@@ -15,9 +15,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=7">
+  <link rel="stylesheet" href="css/styles.css?v=8">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js?v=7"></script>
+  <script src="js/supabase-config.js?v=8"></script>
 </head>
 <body>
 
@@ -159,6 +159,24 @@
       <p class="account-legal">
         By continuing you agree to BTHI's terms and privacy policy.
       </p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       WELCOME / EMAIL CONFIRMED POPUP
+  ============================================================ -->
+  <div class="welcome-modal" id="welcomeModal" aria-hidden="true" role="dialog">
+    <div class="welcome-backdrop" data-welcome-close></div>
+    <div class="welcome-card" role="document">
+      <div class="welcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <span class="welcome-eyebrow">Email Confirmed</span>
+      <h2 class="welcome-title" id="welcomeTitle">Welcome to BTHI.</h2>
+      <p class="welcome-sub" id="welcomeSub">Your row on the founding cap table is locked in. You're officially part of the community.</p>
+      <button type="button" class="welcome-cta" data-welcome-close>Enter BTHI →</button>
     </div>
   </div>
 
@@ -769,6 +787,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=7"></script>
+  <script src="js/main.js?v=8"></script>
 </body>
 </html>
