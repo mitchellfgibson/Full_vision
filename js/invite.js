@@ -22,8 +22,8 @@ const VALID_CODES = {
 const CAP_TABLE = [
   { num: 1, holder: 'THE FOUNDER',       shares: '4,000', stake: '40.0%', status: 'allocated' },
   { num: 2, holder: 'THE OPTIMIST',      shares: '2,000', stake: '20.0%', status: 'allocated' },
-  { num: 3, holder: 'THE OPERATOR',      shares: '1,500', stake: '15.0%', status: 'allocated' },
-  { num: 4, holder: null /* you */,      shares: '1,500', stake: '15.0%', status: 'pending'   },
+  { num: 3, holder: null /* you */,      shares: '1,500', stake: '15.0%', status: 'pending'   },
+  { num: 4, holder: 'THE OPERATOR',      shares: '1,500', stake: '15.0%', status: 'sealed'    },
   { num: 5, holder: 'THE NEXT BELIEVER', shares: '1,000', stake: '10.0%', status: 'sealed'    },
 ];
 
@@ -184,8 +184,8 @@ form.addEventListener('submit', async e => {
 
   const claimedEl = document.getElementById('seatsClaimed');
   const openEl    = document.getElementById('seatsRemaining');
-  if (claimedEl) claimedEl.textContent = '4';
-  if (openEl)    openEl.textContent    = '1';
+  if (claimedEl) claimedEl.textContent = '3';
+  if (openEl)    openEl.textContent    = '2';
 
   setTimeout(() => {
     window.location.href = `index.html?code=${encodeURIComponent(code)}&open=signup`;
