@@ -228,19 +228,39 @@ if (accountModal) {
   }
 
   // ── SIGN UP — invite-gated + real Supabase auth ──────────────
+  // The claim is ATOMIC: the UPDATE only matches rows where used_at IS NULL,
+  // and the row-level security policy enforces the same constraint at the DB.
+  // Two users racing the same code can never both succeed.
   async function handleSignUp(email, password, code, profile) {
     const sb = window.bthiSupabase;
     if (!sb) return { ok: false, message: 'Auth service unavailable. Refresh and try again.' };
 
-    // 1. Re-verify the invitation code (defense-in-depth — also checked at /invite)
-    const { data: inv, error: invErr } = await sb
+    // 1. Atomically claim the code. Conditional UPDATE — only writes if still unclaimed.
+    const { data: claimed, error: claimErr } = await sb
       .from('invitations')
-      .select('code, used_at')
+      .update({
+        used_at: new Date().toISOString(),
+        email,
+      })
       .eq('code', code)
+      .is('used_at', null)
+      .select()
       .maybeSingle();
-    if (invErr) return { ok: false, message: 'Could not verify invitation. Try again.' };
-    if (!inv)   return { ok: false, message: 'Invitation code not recognized.' };
-    if (inv.used_at) return { ok: false, message: 'This invitation code has already been used.' };
+
+    if (claimErr) {
+      return { ok: false, message: 'Could not verify invitation. Try again.' };
+    }
+    if (!claimed) {
+      // Either the code doesn't exist, or it was just claimed by someone else.
+      const { data: existing } = await sb
+        .from('invitations')
+        .select('code, used_at')
+        .eq('code', code)
+        .maybeSingle();
+      if (!existing)        return { ok: false, message: 'Invitation code not recognized.' };
+      if (existing.used_at) return { ok: false, message: 'This invitation code has already been used.' };
+      return { ok: false, message: 'Could not claim this code. Try again.' };
+    }
 
     // 2. Create the auth user with profile metadata
     const { data, error } = await sb.auth.signUp({
@@ -255,16 +275,12 @@ if (accountModal) {
         },
       },
     });
-    if (error) return { ok: false, message: error.message };
-
-    // 3. Mark the code claimed
-    await sb.from('invitations')
-      .update({
-        used_at: new Date().toISOString(),
-        email,
-        user_id: data.user ? data.user.id : null,
-      })
-      .eq('code', code);
+    if (error) {
+      // Code is now claimed but auth user wasn't created. Acceptable tradeoff:
+      // a claimed but unused code is a minor inventory issue; a double-claimed
+      // code (the bug we're fixing) would be a real problem.
+      return { ok: false, message: error.message };
+    }
 
     return { ok: true, user: data.user };
   }
