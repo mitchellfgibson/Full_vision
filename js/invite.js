@@ -1,29 +1,24 @@
 'use strict';
 
 /* ============================================================
-   BTHI · FOUNDING MANIFEST
-   Invite-code entry experience
+   BTHI · FOUNDING CAP TABLE
+   Inline invite-code entry inside the pending row
 ============================================================ */
 
 /* --- Demo allowlist of invite codes ---
    Replace with Supabase later:
      const { data, error } = await supabase
-       .from('invitations')
-       .select('seat_number, email, used_at')
-       .eq('code', code)
-       .single();
+       .from('invitations').select('*').eq('code', code).single();
    --------------------------------------- */
 const VALID_CODES = {
-  'BTHI1': { seat: 47, name: 'YOU' },
-  'FOUND': { seat: 47, name: 'YOU' },
-  'SEAT7': { seat: 47, name: 'YOU' },
-  'RYAN1': { seat: 47, name: 'YOU' },
-  'DEMO5': { seat: 47, name: 'YOU' },
+  'BTHI1': true,
+  'FOUND': true,
+  'SEAT7': true,
+  'RYAN1': true,
+  'DEMO5': true,
 };
 
-/* === CAP TABLE DATA ===========================================
-   A fun, illustrative 5-row cap table. Row 4 = pending (yours).
-============================================================== */
+/* === A fun, illustrative 5-row cap table ===================== */
 const CAP_TABLE = [
   { num: 1, holder: 'THE FOUNDER',       shares: '4,000', stake: '40.0%', status: 'allocated' },
   { num: 2, holder: 'THE OPTIMIST',      shares: '2,000', stake: '20.0%', status: 'allocated' },
@@ -41,13 +36,14 @@ function buildManifest() {
     let holderCell, sharesCell, stakeCell, statusCell, rowClass;
 
     if (row.status === 'pending') {
-      holderCell = `<span class="m-code-row" id="manifestCodeRow">
-                      <span class="m-cbx" data-mirror="0">_</span>
-                      <span class="m-cbx" data-mirror="1">_</span>
-                      <span class="m-cbx" data-mirror="2">_</span>
-                      <span class="m-cbx" data-mirror="3">_</span>
-                      <span class="m-cbx" data-mirror="4">_</span>
-                    </span>`;
+      holderCell = `
+        <div class="row-code-inputs" role="group" aria-label="5-character invitation code">
+          <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="0" aria-label="Code character 1">
+          <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="1" aria-label="Code character 2">
+          <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="2" aria-label="Code character 3">
+          <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="3" aria-label="Code character 4">
+          <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="4" aria-label="Code character 5">
+        </div>`;
       sharesCell = `<span class="m-shares m-shares-pending">${row.shares}</span>`;
       stakeCell  = `<span class="m-stake m-stake-pending">${row.stake}</span>`;
       statusCell = `<span class="m-status m-status-pending">PENDING</span>`;
@@ -81,25 +77,17 @@ function buildManifest() {
 }
 
 /* ============================================================
-   CODE INPUT — 5-box typing experience
+   Build the table, THEN wire up the inputs that now live in it
 ============================================================ */
+buildManifest();
+
 const codeInputs = document.querySelectorAll('[data-code-box]');
 const submitBtn  = document.getElementById('codeSubmit');
 const feedback   = document.getElementById('codeFeedback');
 const form       = document.getElementById('codeForm');
-const mirrors    = () => document.querySelectorAll('.m-cbx');
 
 function getCode() {
   return Array.from(codeInputs).map(i => i.value.toUpperCase()).join('');
-}
-
-function syncMirror() {
-  const ms = mirrors();
-  codeInputs.forEach((inp, i) => {
-    const v = inp.value.toUpperCase();
-    if (ms[i]) ms[i].textContent = v || '_';
-    if (ms[i]) ms[i].classList.toggle('filled', !!v);
-  });
 }
 
 function updateSubmitState() {
@@ -110,7 +98,6 @@ function updateSubmitState() {
 
 codeInputs.forEach((input, i) => {
   input.addEventListener('input', e => {
-    // Force uppercase alphanumeric
     let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
     e.target.value = v.slice(0, 1);
 
@@ -120,7 +107,6 @@ codeInputs.forEach((input, i) => {
 
     feedback.textContent = '';
     feedback.className = 'code-feedback';
-    syncMirror();
     updateSubmitState();
   });
 
@@ -128,7 +114,6 @@ codeInputs.forEach((input, i) => {
     if (e.key === 'Backspace' && !input.value && i > 0) {
       codeInputs[i - 1].focus();
       codeInputs[i - 1].value = '';
-      syncMirror();
       updateSubmitState();
     }
     if (e.key === 'Enter') {
@@ -146,7 +131,6 @@ codeInputs.forEach((input, i) => {
     text.split('').forEach((c, idx) => {
       if (codeInputs[idx]) codeInputs[idx].value = c;
     });
-    syncMirror();
     updateSubmitState();
     const last = Math.min(text.length, codeInputs.length - 1);
     codeInputs[last] && codeInputs[last].focus();
@@ -167,10 +151,6 @@ form.addEventListener('submit', async e => {
   feedback.className = 'code-feedback';
 
   // ── Replace with Supabase call ─────────────────────────────
-  //   const { data, error } = await supabase
-  //     .from('invitations').select('*').eq('code', code).single();
-  //   const valid = !!data && !data.used_at;
-  // ───────────────────────────────────────────────────────────
   await new Promise(r => setTimeout(r, 650));
   const valid = !!VALID_CODES[code];
 
@@ -178,14 +158,17 @@ form.addEventListener('submit', async e => {
     feedback.textContent = 'That code isn\'t recognized. Check your letter and try again.';
     feedback.className = 'code-feedback is-error';
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Claim Seat →';
-    document.querySelector('.entry-card').classList.add('shake');
-    setTimeout(() => document.querySelector('.entry-card').classList.remove('shake'), 500);
+    submitBtn.textContent = 'Claim Row →';
+    const panel = document.querySelector('.invite-panel');
+    if (panel) {
+      panel.classList.add('shake');
+      setTimeout(() => panel.classList.remove('shake'), 500);
+    }
     return;
   }
 
   // SUCCESS — lock the row in
-  submitBtn.textContent = '✓ Seat Claimed';
+  submitBtn.textContent = '✓ Row Claimed';
   submitBtn.classList.add('is-success');
 
   const youRow = CAP_TABLE.find(r => r.status === 'pending');
@@ -199,31 +182,25 @@ form.addEventListener('submit', async e => {
     row.querySelector('.col-status').innerHTML = `<span class="m-status m-status-self">✓ ALLOCATED</span>`;
   }
 
-  // Bump cap-table counter
   const claimedEl = document.getElementById('seatsClaimed');
   const openEl    = document.getElementById('seatsRemaining');
   if (claimedEl) claimedEl.textContent = '4';
   if (openEl)    openEl.textContent    = '1';
 
-  // Brief celebration, then route into account creation
   setTimeout(() => {
     window.location.href = `index.html?code=${encodeURIComponent(code)}&open=signup`;
   }, 1400);
 });
 
 /* ============================================================
-   INITIALIZE
+   PRE-FILL FROM URL ?code=XXXXX
 ============================================================ */
-buildManifest();
-
-// Pre-fill from query string ?code=XXXXX
 const urlCode = new URLSearchParams(window.location.search).get('code');
 if (urlCode) {
   const clean = urlCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
   clean.split('').forEach((c, idx) => {
     if (codeInputs[idx]) codeInputs[idx].value = c;
   });
-  syncMirror();
   updateSubmitState();
   if (clean.length === 5) {
     setTimeout(() => form.requestSubmit(), 400);
@@ -231,5 +208,5 @@ if (urlCode) {
     codeInputs[clean.length] && codeInputs[clean.length].focus();
   }
 } else {
-  codeInputs[0].focus();
+  codeInputs[0] && codeInputs[0].focus();
 }

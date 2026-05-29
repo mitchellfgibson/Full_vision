@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BTHI — Founding Manifest</title>
-  <meta name="description" content="Claim your seat on the BTHI Founding Manifest. By invitation only.">
+  <title>BTHI — Founding Cap Table</title>
+  <meta name="description" content="Claim your row on the BTHI founding cap table. By invitation only.">
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
 
     <header class="invite-header">
       <a href="index.html" class="invite-logo">BTHI<span class="logo-dot"></span></a>
-      <span class="invite-eyebrow">FOUNDING MANIFEST · 2026</span>
+      <span class="invite-eyebrow">FOUNDING CAP TABLE</span>
     </header>
 
     <main class="invite-main">
@@ -28,81 +28,50 @@
         <span class="invite-tag">By Invitation Only</span>
         <h1 class="invite-title">Claim Your Row.</h1>
         <p class="invite-sub">
-          The BTHI founding cap table is forming. Enter the 5-character code from
-          your invitation to claim your row in the ledger.
+          The BTHI founding cap table is being assembled. Type your 5-character
+          invitation code into row <strong>#004</strong> to take your seat.
         </p>
       </div>
 
-      <div class="invite-grid">
-        <!-- LEFT: MANIFEST -->
-        <div class="manifest-wrap">
-          <div class="manifest-head">
-            <div class="manifest-head-left">
-              <span class="manifest-title">BTHI · FOUNDING CAP TABLE</span>
-              <span class="manifest-sub">Pro-rata ownership ledger · illustrative</span>
-            </div>
-            <div class="manifest-counts">
-              <div><strong id="seatsClaimed">3</strong><span>allocated</span></div>
-              <div><strong id="seatsRemaining">2</strong><span>open</span></div>
-            </div>
+      <form id="codeForm" class="invite-panel" autocomplete="off" novalidate>
+        <div class="panel-head">
+          <div class="panel-head-left">
+            <span class="panel-title">BTHI · FOUNDING CAP TABLE</span>
+            <span class="panel-sub">Pro-rata ownership ledger · illustrative</span>
           </div>
-
-          <div class="manifest-scroll" id="manifestScroll">
-            <table class="manifest-table" aria-label="Founding cap table">
-              <thead>
-                <tr>
-                  <th class="col-num">ROW</th>
-                  <th class="col-name">HOLDER</th>
-                  <th class="col-shares">SHARES</th>
-                  <th class="col-stake">STAKE</th>
-                  <th class="col-status">STATUS</th>
-                </tr>
-              </thead>
-              <tbody id="manifestBody">
-                <!-- Rows injected by JS -->
-              </tbody>
-            </table>
+          <div class="panel-counts">
+            <div><strong id="seatsClaimed">3</strong><span>allocated</span></div>
+            <div><strong id="seatsRemaining">2</strong><span>open</span></div>
           </div>
+        </div>
 
-          <div class="manifest-foot">
+        <div class="panel-table-wrap">
+          <table class="manifest-table" aria-label="Founding cap table">
+            <thead>
+              <tr>
+                <th class="col-num">ROW</th>
+                <th class="col-name">HOLDER</th>
+                <th class="col-shares">SHARES</th>
+                <th class="col-stake">STAKE</th>
+                <th class="col-status">STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="manifestBody">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel-foot">
+          <button type="submit" class="code-submit" id="codeSubmit" disabled>Claim Row →</button>
+          <div class="code-feedback" id="codeFeedback" aria-live="polite"></div>
+          <p class="panel-fineprint">
             <span class="manifest-dot"></span>
             Illustrative cap table — holder identities sealed until close of round.
-          </div>
+            <a href="index.html#join">Request an invitation →</a>
+          </p>
         </div>
-
-        <!-- RIGHT: CODE ENTRY -->
-        <div class="invite-entry">
-          <div class="entry-card">
-            <span class="entry-eyebrow">Your Row</span>
-            <div class="entry-seat-num" id="entrySeat">#004</div>
-            <p class="entry-instructions">
-              Enter the 5-character code from your invitation.
-            </p>
-
-            <form id="codeForm" class="code-form" autocomplete="off" novalidate>
-              <div class="code-inputs" id="codeInputs">
-                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="0" aria-label="Code character 1">
-                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="1" aria-label="Code character 2">
-                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="2" aria-label="Code character 3">
-                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="3" aria-label="Code character 4">
-                <input type="text" inputmode="text" maxlength="1" autocomplete="off" data-code-box="4" aria-label="Code character 5">
-              </div>
-
-              <button type="submit" class="code-submit" id="codeSubmit" disabled>Claim Seat →</button>
-
-              <div class="code-feedback" id="codeFeedback" aria-live="polite"></div>
-            </form>
-
-            <p class="entry-fineprint">
-              No code? <a href="index.html#join">Request an invitation →</a>
-            </p>
-          </div>
-
-          <div class="entry-meta">
-            <span>Sealed Invitation Series</span>
-          </div>
-        </div>
-      </div>
+      </form>
     </main>
 
     <footer class="invite-footer">
