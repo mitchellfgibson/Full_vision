@@ -15,9 +15,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=6">
+  <link rel="stylesheet" href="css/styles.css?v=7">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js?v=6"></script>
+  <script src="js/supabase-config.js?v=7"></script>
   <style>
     /* === Animated data-flow connection lines === */
     .map-connections path {
@@ -155,6 +155,20 @@
           <span class="account-code-value" id="accountCodeValue">—</span>
         </div>
 
+        <div class="account-field-row">
+          <label class="account-field">
+            <span>First Name</span>
+            <input type="text" name="firstName" required autocomplete="given-name" placeholder="Ryan">
+          </label>
+          <label class="account-field">
+            <span>Last Name</span>
+            <input type="text" name="lastName" required autocomplete="family-name" placeholder="Neely">
+          </label>
+        </div>
+        <label class="account-field">
+          <span>City</span>
+          <input type="text" name="city" required autocomplete="address-level2" placeholder="Austin, TX">
+        </label>
         <label class="account-field">
           <span>Email</span>
           <input type="email" name="email" required autocomplete="email" placeholder="you@email.com">
@@ -177,6 +191,32 @@
           Don't have a code? <a href="invite.html">Enter your invitation →</a>
         </p>
       </form>
+
+      <!-- PROFILE VIEW (shown when signed in) -->
+      <div class="account-form" data-account-panel="profile">
+        <div class="profile-header">
+          <div class="profile-avatar" id="profileAvatar"><span>?</span></div>
+          <div class="profile-name" id="profileName">Member</div>
+          <div class="profile-email" id="profileEmail">—</div>
+        </div>
+
+        <div class="profile-rows">
+          <div class="profile-row">
+            <span class="pr-label">City</span>
+            <span class="pr-value" id="profileCity">—</span>
+          </div>
+          <div class="profile-row">
+            <span class="pr-label">Invitation Code</span>
+            <span class="pr-value" id="profileCode">—</span>
+          </div>
+          <div class="profile-row">
+            <span class="pr-label">Member Since</span>
+            <span class="pr-value" id="profileSince">—</span>
+          </div>
+        </div>
+
+        <button type="button" class="account-submit account-signout" id="signOutBtn">Sign Out</button>
+      </div>
 
       <p class="account-legal">
         By continuing you agree to BTHI's terms and privacy policy.
@@ -400,6 +440,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=6"></script>
+  <script src="js/main.js?v=7"></script>
 </body>
 </html>

@@ -228,7 +228,7 @@ if (accountModal) {
   }
 
   // ── SIGN UP — invite-gated + real Supabase auth ──────────────
-  async function handleSignUp(email, password, code) {
+  async function handleSignUp(email, password, code, profile) {
     const sb = window.bthiSupabase;
     if (!sb) return { ok: false, message: 'Auth service unavailable. Refresh and try again.' };
 
@@ -242,11 +242,18 @@ if (accountModal) {
     if (!inv)   return { ok: false, message: 'Invitation code not recognized.' };
     if (inv.used_at) return { ok: false, message: 'This invitation code has already been used.' };
 
-    // 2. Create the auth user
+    // 2. Create the auth user with profile metadata
     const { data, error } = await sb.auth.signUp({
       email,
       password,
-      options: { data: { invitation_code: code } },
+      options: {
+        data: {
+          invitation_code: code,
+          first_name: profile.firstName,
+          last_name:  profile.lastName,
+          city:       profile.city,
+        },
+      },
     });
     if (error) return { ok: false, message: error.message };
 
@@ -290,30 +297,111 @@ if (accountModal) {
     setTimeout(closeAccount, 700);
   });
 
-  // Reflect signed-in state in the nav
+  // ── Avatar + profile state ──────────────────────────────────
+  let currentUser = null;
+
+  function initialsFor(user) {
+    const m  = user.user_metadata || {};
+    const fn = (m.first_name || '').trim();
+    const ln = (m.last_name  || '').trim();
+    if (fn || ln) return ((fn[0] || '') + (ln[0] || '')).toUpperCase();
+    return (user.email || '?')[0].toUpperCase();
+  }
+  function fullName(user) {
+    const m  = user.user_metadata || {};
+    const fn = (m.first_name || '').trim();
+    const ln = (m.last_name  || '').trim();
+    return `${fn} ${ln}`.trim() || 'BTHI Member';
+  }
+
+  function populateProfile(user) {
+    const m = user.user_metadata || {};
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('profileName',  fullName(user));
+    set('profileEmail', user.email || '—');
+    set('profileCity',  m.city || '—');
+    set('profileCode',  m.invitation_code || '—');
+    const since = user.created_at ? new Date(user.created_at).toLocaleDateString(undefined, {
+      year: 'numeric', month: 'short', day: 'numeric',
+    }) : '—';
+    set('profileSince', since);
+    const avatar = document.getElementById('profileAvatar');
+    if (avatar) avatar.innerHTML = `<span>${initialsFor(user)}</span>`;
+  }
+
+  function applySessionUI(user) {
+    currentUser = user || null;
+    document.body.classList.toggle('is-signed-in', !!user);
+
+    // Swap nav button: text "Account" → initials avatar
+    document.querySelectorAll('.nav-account').forEach(btn => {
+      if (user) {
+        btn.classList.add('has-user');
+        btn.innerHTML = `<span class="nav-avatar-initials">${initialsFor(user)}</span>`;
+        btn.setAttribute('aria-label', `Account · ${fullName(user)}`);
+      } else {
+        btn.classList.remove('has-user');
+        btn.textContent = 'Account';
+        btn.setAttribute('aria-label', 'Account');
+      }
+    });
+    document.querySelectorAll('.nav-mobile-account').forEach(btn => {
+      if (btn.tagName === 'BUTTON') {
+        btn.textContent = user ? `My Account (${initialsFor(user)})` : 'Account';
+      }
+    });
+
+    if (user) populateProfile(user);
+  }
+
   async function refreshAccountNav() {
     const sb = window.bthiSupabase;
     if (!sb) return;
     const { data: { user } } = await sb.auth.getUser();
-    document.querySelectorAll('.nav-account, .nav-mobile-account').forEach(btn => {
-      if (btn.tagName === 'BUTTON') {
-        btn.textContent = user ? 'My Account' : 'Account';
-      }
+    applySessionUI(user);
+  }
+
+  // Sign out handler
+  const signOutBtn = document.getElementById('signOutBtn');
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', async () => {
+      const sb = window.bthiSupabase;
+      signOutBtn.textContent = 'Signing out…';
+      if (sb) await sb.auth.signOut();
+      applySessionUI(null);
+      signOutBtn.textContent = 'Sign Out';
+      switchTab('signin');
+      closeAccount();
     });
   }
+
+  // When opening the modal: if signed in, jump to profile view
+  document.querySelectorAll('[data-account-open]').forEach(el => {
+    el.addEventListener('click', () => {
+      switchTab(currentUser ? 'profile' : 'signin');
+    });
+  });
+
   refreshAccountNav();
 
   // Sign Up submit
   signUpForm.addEventListener('submit', async e => {
     e.preventDefault();
     clearErrors();
-    const email   = signUpForm.email.value.trim();
-    const pw      = signUpForm.password.value;
-    const confirm = signUpForm.confirmPassword.value;
-    const btn     = signUpForm.querySelector('.account-submit');
+    const firstName = signUpForm.firstName.value.trim();
+    const lastName  = signUpForm.lastName.value.trim();
+    const city      = signUpForm.city.value.trim();
+    const email     = signUpForm.email.value.trim();
+    const pw        = signUpForm.password.value;
+    const confirm   = signUpForm.confirmPassword.value;
+    const btn       = signUpForm.querySelector('.account-submit');
 
     if (!inviteCode || inviteCode.length !== 5) {
       showError(signUpForm, 'A valid invitation code is required. Enter your code at /invite.');
+      return;
+    }
+    if (!firstName || !lastName || !city) {
+      showError(signUpForm, 'Please fill in name and city.');
       return;
     }
     if (pw.length < 8) {
@@ -327,7 +415,7 @@ if (accountModal) {
 
     btn.disabled = true;
     btn.textContent = 'Creating account…';
-    const res = await handleSignUp(email, pw, inviteCode);
+    const res = await handleSignUp(email, pw, inviteCode, { firstName, lastName, city });
     btn.disabled = false;
     btn.textContent = 'Create Account';
 
