@@ -5,18 +5,7 @@
    Inline invite-code entry inside the pending row
 ============================================================ */
 
-/* --- Demo allowlist of invite codes ---
-   Replace with Supabase later:
-     const { data, error } = await supabase
-       .from('invitations').select('*').eq('code', code).single();
-   --------------------------------------- */
-const VALID_CODES = {
-  'BTHI1': true,
-  'FOUND': true,
-  'SEAT7': true,
-  'RYAN1': true,
-  'DEMO5': true,
-};
+/* Code validation now hits Supabase (see validateCode below) */
 
 /* === A fun, illustrative 5-row cap table ===================== */
 const CAP_TABLE = [
@@ -150,12 +139,10 @@ form.addEventListener('submit', async e => {
   feedback.textContent = '';
   feedback.className = 'code-feedback';
 
-  // ── Replace with Supabase call ─────────────────────────────
-  await new Promise(r => setTimeout(r, 650));
-  const valid = !!VALID_CODES[code];
+  const result = await validateCode(code);
 
-  if (!valid) {
-    feedback.textContent = 'That code isn\'t recognized. Check your letter and try again.';
+  if (!result.ok) {
+    feedback.textContent = result.message || 'That code isn\'t recognized.';
     feedback.className = 'code-feedback is-error';
     submitBtn.disabled = false;
     submitBtn.textContent = 'Claim Row →';
@@ -191,6 +178,28 @@ form.addEventListener('submit', async e => {
     window.location.href = `index.html?code=${encodeURIComponent(code)}&open=signup`;
   }, 1400);
 });
+
+/* ============================================================
+   Validate a code against Supabase invitations table
+============================================================ */
+async function validateCode(code) {
+  const sb = window.bthiSupabase;
+  if (!sb) return { ok: false, message: 'Service unavailable. Refresh and try again.' };
+
+  const { data, error } = await sb
+    .from('invitations')
+    .select('code, used_at')
+    .eq('code', code)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Supabase error:', error);
+    return { ok: false, message: 'Could not verify code. Try again.' };
+  }
+  if (!data)         return { ok: false, message: 'That code isn\'t recognized. Check your letter.' };
+  if (data.used_at)  return { ok: false, message: 'This code has already been claimed.' };
+  return { ok: true };
+}
 
 /* ============================================================
    PRE-FILL FROM URL ?code=XXXXX

@@ -218,29 +218,48 @@ if (accountModal) {
     accountModal.querySelectorAll('.account-error').forEach(e => e.remove());
   };
 
-  // ── SIGN IN handler ──────────────────────────────────────────
-  // Wire Supabase here:
-  //   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  // ── SIGN IN — real Supabase auth ─────────────────────────────
   async function handleSignIn(email, password) {
-    await new Promise(r => setTimeout(r, 500)); // simulated latency
-    console.log('Sign in attempt:', { email });
-    return { ok: true };
+    const sb = window.bthiSupabase;
+    if (!sb) return { ok: false, message: 'Auth service unavailable. Refresh and try again.' };
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) return { ok: false, message: error.message };
+    return { ok: true, user: data.user };
   }
 
-  // ── SIGN UP handler ──────────────────────────────────────────
-  // Wire Supabase here (with invite-code lookup + mark-used):
-  //   1. Validate code:
-  //      const { data: inv } = await supabase.from('invitations')
-  //        .select('*').eq('code', code).single();
-  //      if (!inv || inv.used_at) return { ok: false, message: 'Invalid or used code' };
-  //   2. Sign up:
-  //      const { data, error } = await supabase.auth.signUp({ email, password });
-  //   3. Mark code used:
-  //      await supabase.from('invitations').update({ used_at: new Date(), user_id: data.user.id }).eq('code', code);
+  // ── SIGN UP — invite-gated + real Supabase auth ──────────────
   async function handleSignUp(email, password, code) {
-    await new Promise(r => setTimeout(r, 500));
-    console.log('Sign up attempt:', { email, code });
-    return { ok: true };
+    const sb = window.bthiSupabase;
+    if (!sb) return { ok: false, message: 'Auth service unavailable. Refresh and try again.' };
+
+    // 1. Re-verify the invitation code (defense-in-depth — also checked at /invite)
+    const { data: inv, error: invErr } = await sb
+      .from('invitations')
+      .select('code, used_at')
+      .eq('code', code)
+      .maybeSingle();
+    if (invErr) return { ok: false, message: 'Could not verify invitation. Try again.' };
+    if (!inv)   return { ok: false, message: 'Invitation code not recognized.' };
+    if (inv.used_at) return { ok: false, message: 'This invitation code has already been used.' };
+
+    // 2. Create the auth user
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: { data: { invitation_code: code } },
+    });
+    if (error) return { ok: false, message: error.message };
+
+    // 3. Mark the code claimed
+    await sb.from('invitations')
+      .update({
+        used_at: new Date().toISOString(),
+        email,
+        user_id: data.user ? data.user.id : null,
+      })
+      .eq('code', code);
+
+    return { ok: true, user: data.user };
   }
 
   // Sign In submit
@@ -267,8 +286,22 @@ if (accountModal) {
       return;
     }
     btn.textContent = '✓ Signed in';
+    refreshAccountNav();
     setTimeout(closeAccount, 700);
   });
+
+  // Reflect signed-in state in the nav
+  async function refreshAccountNav() {
+    const sb = window.bthiSupabase;
+    if (!sb) return;
+    const { data: { user } } = await sb.auth.getUser();
+    document.querySelectorAll('.nav-account, .nav-mobile-account').forEach(btn => {
+      if (btn.tagName === 'BUTTON') {
+        btn.textContent = user ? 'My Account' : 'Account';
+      }
+    });
+  }
+  refreshAccountNav();
 
   // Sign Up submit
   signUpForm.addEventListener('submit', async e => {
@@ -302,11 +335,19 @@ if (accountModal) {
       showError(signUpForm, res.message || 'Something went wrong. Try again.');
       return;
     }
-    btn.textContent = '✓ Account created';
-    setTimeout(() => {
-      switchTab('signin');
-      btn.textContent = 'Create Account';
-    }, 900);
+    // Replace the form with a success state — they need to confirm their email
+    const panel = document.querySelector('[data-account-panel="signup"]');
+    if (panel) {
+      panel.innerHTML = `
+        <h3 class="account-title">Check your email.</h3>
+        <p class="account-lead">
+          We just sent a confirmation link to <strong>${email}</strong>.
+          Click it to activate your BTHI account and sign in.
+        </p>
+        <button type="button" class="account-submit is-success" data-account-close>Got it</button>
+      `;
+      panel.querySelector('[data-account-close]').addEventListener('click', closeAccount);
+    }
   });
 
   // Auto-open if URL says so (?open=signup or ?open=signin)
