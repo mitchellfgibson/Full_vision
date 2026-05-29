@@ -2288,6 +2288,40 @@ body.account-open { overflow: hidden; }
 
 .panel-table-wrap { position: relative; }
 
+/* Instruction banner — sits between head and table */
+.panel-instruction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 22px;
+  background: linear-gradient(90deg,
+    rgba(232, 184, 64, 0.05) 0%,
+    rgba(232, 184, 64, 0.12) 50%,
+    rgba(232, 184, 64, 0.05) 100%);
+  border-bottom: 1px solid rgba(232, 184, 64, 0.18);
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  line-height: 1.4;
+}
+.panel-instruction strong {
+  color: var(--gold-bright, #e8b840);
+  font-weight: 700;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.pi-arrow {
+  display: inline-block;
+  color: var(--gold-bright, #e8b840);
+  font-size: 18px;
+  font-weight: 700;
+  animation: pi-bounce 1.4s ease-in-out infinite;
+}
+@keyframes pi-bounce {
+  0%, 100% { transform: translateY(-3px); opacity: 0.7; }
+  50%      { transform: translateY(3px);  opacity: 1; }
+}
+
 .manifest-table {
   width: 100%;
   border-collapse: collapse;
@@ -2346,18 +2380,33 @@ body.account-open { overflow: hidden; }
 }
 .m-row-locked .col-num          { color: rgba(255, 255, 255, 0.3); }
 
-/* Pending row — the user's seat */
+/* Pending row — the user's seat. Twice the size of the other rows. */
 .m-row-pending {
-  background: linear-gradient(90deg, rgba(232, 184, 64, 0.12) 0%, rgba(232, 184, 64, 0.04) 100%);
+  background: linear-gradient(90deg, rgba(232, 184, 64, 0.16) 0%, rgba(232, 184, 64, 0.06) 100%);
   position: relative;
+}
+.m-row-pending td {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+.m-row-pending .col-num {
+  font-size: 16px;
+  font-weight: 700;
+}
+.m-row-pending .m-shares-pending,
+.m-row-pending .m-stake-pending {
+  font-size: 16px;
+}
+.m-row-pending .m-status-pending {
+  font-size: 12px;
 }
 .m-row-pending::before {
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  width: 3px;
+  width: 4px;
   background: var(--gold-bright, #e8b840);
-  box-shadow: 0 0 12px rgba(232, 184, 64, 0.6);
+  box-shadow: 0 0 14px rgba(232, 184, 64, 0.7);
   animation: m-glow 1.8s ease-in-out infinite;
 }
 @keyframes m-glow {
@@ -2444,17 +2493,17 @@ body.account-open { overflow: hidden; }
   align-items: center;
 }
 .row-code-inputs input {
-  width: 36px;
-  height: 42px;
+  width: 48px;
+  height: 58px;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 17px;
+  font-size: 22px;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
   color: var(--gold-bright, #e8b840);
-  background: rgba(232, 184, 64, 0.08);
-  border: 1px solid rgba(232, 184, 64, 0.4);
-  border-radius: 7px;
+  background: rgba(232, 184, 64, 0.1);
+  border: 1.5px solid rgba(232, 184, 64, 0.5);
+  border-radius: 8px;
   padding: 0;
   outline: none;
   caret-color: var(--gold-bright, #e8b840);
@@ -2575,12 +2624,14 @@ body.account-open { overflow: hidden; }
   .invite-header { flex-direction: column; align-items: flex-start; gap: 10px; }
   .panel-head { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px 18px; }
   .panel-foot { padding: 18px 18px; }
+  .panel-instruction { font-size: 12.5px; padding: 12px 16px; gap: 8px; }
   .col-stake { display: none; }
   .manifest-table td, .manifest-table thead th { padding-left: 14px; padding-right: 14px; }
-  .row-code-inputs input { width: 32px; height: 38px; font-size: 15px; }
+  .m-row-pending td { padding-top: 22px; padding-bottom: 22px; }
+  .row-code-inputs input { width: 38px; height: 48px; font-size: 18px; }
   .row-code-inputs { gap: 5px; }
 }
 @media (max-width: 380px) {
   .manifest-table td, .manifest-table thead th { padding-left: 10px; padding-right: 10px; font-size: 12px; }
-  .row-code-inputs input { width: 28px; height: 34px; font-size: 14px; }
+  .row-code-inputs input { width: 32px; height: 42px; font-size: 16px; }
 }
