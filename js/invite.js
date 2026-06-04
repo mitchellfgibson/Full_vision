@@ -175,7 +175,7 @@ form.addEventListener('submit', async e => {
   if (openEl)    openEl.textContent    = '2';
 
   setTimeout(() => {
-    window.location.href = `bthi.html?code=${encodeURIComponent(code)}&open=signup`;
+    window.location.href = `index.html?code=${encodeURIComponent(code)}&open=signup`;
   }, 1400);
 });
 
